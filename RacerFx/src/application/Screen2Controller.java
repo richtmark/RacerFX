@@ -6,11 +6,15 @@ package application;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import Car.KeyRace;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,40 +45,78 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     private TextField idTxfInput;
     @FXML
     private TextField idTxfWanted;
+    @FXML
+    private Label idLblCountdown;
     
+    // fuer den Counter der Tastenkombination
+    private static final Integer STARTTIME = 5;
+    private Timeline timeline;
+    private IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
+        
     private GraphicsContext gc;
-    
-    
+        
 
     /**
      * Initializieren der Controllerklasse
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    	KeyRace raceObj = new KeyRace();
-    	playbutton.setOnAction(new EventHandler<ActionEvent>() {    		
+    	KeyRace keyRaceObj = new KeyRace();
+        // Bind the timerLabel text property to the timeSeconds property
+    	idLblCountdown.textProperty().bind(timeSeconds.asString());
+    	
+    	
+    	playbutton.setOnAction(new EventHandler<ActionEvent>() {   //Eventhandler playbutton 		
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Playbutton aufgerufen");
-                raceObj.start();
+                keyRaceObj.start();   
                 
-                //paintCar(); //WENN ES SOWEIT IST
-                //raceObj.drive();
-                //idTxfWanted.setText(raceObj.getwantToPressAlasString());
+              //#############################################################################
                 /*
-                //Beispiel alle 5 Sekunden dauerhaft funktion aufrufen
-                Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
+                 * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
+                 * in diesem Fall später an timeSeconds eine IntegerProperty 
+                 */
+                final ChangeListener changeListenerCountdown = new ChangeListener() {
                     @Override
-                    public void handle(ActionEvent event) {
-                        System.out.println("this is called every 5 seconds on UI thread");
-                        raceObj.run();
-                        idTxfWanted.setText(raceObj.getRequestedString());                        
-                        //System.out.println(raceObj.isInputCorrect(idTxfWanted.getText().toString()));
-                    }
-                }));
-                fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
-                fiveSecondsWonder.play();
-                */
+                    public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
+                      System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
+                      if ((int)newValue == 0) {
+                    	  System.out.println("FUBA ist 0");
+                    	  idTxfWanted.setText(keyRaceObj.getRequestedString());
+                      }
+                    }	
+                };                
+                /*
+                 * Hier wird der Listener bei der property angemeldet
+                 */
+                timeSeconds.addListener(changeListenerCountdown);
+              //#############################################################################
+                
+                
+                
+              //#############################################################################
+                /*
+                 * 
+                 * Die Timeline fuer den Countdown steuern
+                 * 
+                 */
+                if (timeline != null) {
+                    timeline.stop();
+                }
+                timeSeconds.set(STARTTIME);
+                timeline = new Timeline();
+                timeline.getKeyFrames().add(
+                        new KeyFrame(Duration.seconds(STARTTIME+1),
+                        new KeyValue(timeSeconds, 0)));
+                timeline.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+                //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+                timeline.playFromStart();           
+              //#############################################################################
+                
+
+                
+
             }
         });
     	iv.setX(10); //Imageview

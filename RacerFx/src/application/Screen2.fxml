@@ -27,7 +27,8 @@
                         <Button fx:id="playbutton" layoutX="28.0" layoutY="41.0" mnemonicParsing="false" text="Play" />
                         <TextField fx:id="idTxfInput" layoutX="28.0" layoutY="85.0" prefHeight="25.0" prefWidth="82.0" />
                         <TextField fx:id="idTxfWanted" layoutX="122.0" layoutY="85.0" prefHeight="25.0" prefWidth="82.0" />
-                        <ProgressBar layoutX="28.0" layoutY="134.0" prefWidth="200.0" progress="0.0" />
+                        <ProgressBar fx:id="idLblCountdownProgressbar" layoutX="28.0" layoutY="134.0" prefWidth="200.0" progress="1.0" />
+                        <Label fx:id="idLblCountdown" layoutX="190.0" layoutY="45.0" text="Label" />
                      </children></AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
