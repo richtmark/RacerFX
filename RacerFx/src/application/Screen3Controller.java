@@ -11,7 +11,7 @@ import javafx.fxml.Initializable;
 /**
  * FXML Controller class
  *
- * @author Angie
+ * @author Robert/Markus
  */
 public class Screen3Controller implements Initializable, ControlledScreen {
 

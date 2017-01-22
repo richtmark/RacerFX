@@ -24,10 +24,15 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import quiz.QuizRace;
 
 /**
  * Controller Hauptbildschirm 2
@@ -38,6 +43,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
 	
     ScreensController myController; //Der Controller fuer die Szenenwechsel
 	
+    
     @FXML //  fx:id="playButton" den playbutton aus der FXML holen
     private Button playbutton; // Value injected by FXMLLoader
     @FXML 
@@ -48,12 +54,27 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     private TextField idTxfWanted;
     @FXML
     private Label idLblCountdown;
+    @FXML
+    private RadioButton idRadioButtonAnswer1;    
+    @FXML
+    private RadioButton idRadioButtonAnswer2;
+    @FXML
+    private RadioButton idRadioButtonAnswer3;
+    @FXML
+    private RadioButton idRadioButtonAnswer4;
+    @FXML
+    private ToggleGroup answerToggleGroup; //RadioButtons ueber FXML zu Grp
+    @FXML
+    private TextArea idTxtAreaQuestion;
     
     // fuer den Counter der Tastenkombination
     private static final Integer STARTTIMEKEYCOUNTDOWN = 10; //Countdown Eingabe sek
     private Timeline timelineKeyCountdown; //Timeline Eingabe Tastenkombination
     private IntegerProperty timeSecondsCountdownProperty = new SimpleIntegerProperty(STARTTIMEKEYCOUNTDOWN);
     //private StringProperty inputStringProperty;
+    
+
+    
         
     private GraphicsContext gc;
         
@@ -63,7 +84,13 @@ public class Screen2Controller implements Initializable , ControlledScreen {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    	idRadioButtonAnswer1.setUserData("1"); //value zuweisen
+    	idRadioButtonAnswer2.setUserData("2");
+    	idRadioButtonAnswer3.setUserData("3");
+    	idRadioButtonAnswer4.setUserData("4");
+    	
     	KeyRace keyRaceObj = new KeyRace();
+    	QuizRace quizRaceObj = new QuizRace();
         // Bind the timerLabel text property to the timeSeconds property
     	idLblCountdown.textProperty().bind(timeSecondsCountdownProperty.asString());
     	//idTxfInput.textProperty().bind(inputStringProperty);
@@ -73,7 +100,21 @@ public class Screen2Controller implements Initializable , ControlledScreen {
             public void handle(ActionEvent event) {
                 System.out.println("Playbutton aufgerufen");
                 keyRaceObj.start();   
-                idTxfWanted.setText(keyRaceObj.getNewRequestedString());                
+                idTxfWanted.setText(keyRaceObj.getNewRequestedString());        
+                
+                                
+                answerToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+                    public void changed(ObservableValue<? extends Toggle> ov,
+                        Toggle old_toggle, Toggle new_toggle) {
+                            if (answerToggleGroup.getSelectedToggle() != null) {
+                            	System.out.println(answerToggleGroup.getSelectedToggle().getUserData().toString());
+                            	//group.getSelectedToggle().getUserData().toString();
+                            	quizRaceObj.getRandomQuestion();
+                            }                
+                        }
+                });                
+                
+                
                 
                 //################## Listener auf Textfield noch einfacher als unten ###########                
                 idTxfInput.textProperty().addListener((observable, oldValue, newValue) -> {

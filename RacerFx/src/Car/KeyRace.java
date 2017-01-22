@@ -19,13 +19,13 @@ public class KeyRace implements Runnable  {
 	//########################### Klassenvariablen ######################################
 	//######################################################################################
 	private boolean correctInput; //korrekte Kombination?
-	private List<Character> userInputAl; //die Kombination des Spielers in einer Arraylist
+	//private List<Character> userInputAl; //die Kombination des Spielers in einer Arraylist
 	private List<Character> requestedAl; //die geforderte Kombination in einer Arraylist
 	//private ArrayList<String> alphabetAl;
 	private char[] alphabet; //eine char-Array fuer das Alphabet 
 	private Random rndAlphaIndex; //ein Random-Objekt zur Auswahl der Buchstaben(Tasten)
-	private ClientCar car;
-	private String inputString; 
+	//private ClientCar car;
+	//private String inputString; 
 	Thread keyRaceThread; //das ganze als eigener Thread siehe Konstruktor
 	private boolean isPlaying; //keyRace aktiv?
 	
@@ -43,10 +43,10 @@ public class KeyRace implements Runnable  {
 		isPlaying = false;
 		alphabet = new char[]{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 		requestedAl = new ArrayList<Character>();
-		userInputAl = new ArrayList<Character>();
+		//userInputAl = new ArrayList<Character>();
 		rndAlphaIndex = new Random();
 		correctInput = false;		
-		inputString = "";
+		//inputString = "";
 		keyRaceThread = new Thread(this, "keyRaceThread");
 	}	
 	
@@ -90,6 +90,7 @@ public class KeyRace implements Runnable  {
 	 * ToDo Exception implementieren
 	 * 
 	 */
+	/*
 	public void setInputString (String argInputString) {
 		//pseudoExceptio
 		if (argInputString.length() == 4) {
@@ -99,6 +100,7 @@ public class KeyRace implements Runnable  {
 			this.inputString = "";
 		}				
 	}
+	*/
 	
 	
 	/**

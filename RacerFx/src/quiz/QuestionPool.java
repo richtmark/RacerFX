@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class QuestionPool implements Iterable<QuestionModel> {	
-
 	private DatabaseConnection objDbConnection; 
 	private ArrayList<QuestionModel> objQuestionPoolList = new ArrayList<QuestionModel>();
 	private ArrayList<String> rawArrayListFromDb;
