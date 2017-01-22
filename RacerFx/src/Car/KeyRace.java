@@ -1,6 +1,6 @@
 /**
  * Klasse erzeugt Tastenkobimation die der Spieler in einem bestimmten zeitrahmen eingeben muss
- * 
+ * ToDo Runnable sinnlos hier im Moment
  */
 
 
@@ -209,7 +209,7 @@ public class KeyRace implements Runnable  {
 	@Override
 	public void run() {		
 		// TODO Auto-generated method stub
-		while (isPlaying) {
+		while (true) {
 			//System.out.println("Run laueft in eigenem Thread");
 			//keyDrive();		
 		}
