@@ -106,8 +106,18 @@ public class KeyRace implements Runnable  {
 	 * in einem Textfield
 	 * @return String
 	 */
-	public String getRequestedString() {
+	public String getNewRequestedString() {
 		randomizeAndResetRequestedAl();
+	    StringBuilder builder = new StringBuilder(requestedAl.size());
+	    for(Character ch: requestedAl)
+	    {
+	        builder.append(ch);
+	    }
+	    return builder.toString();
+	}
+	
+	
+	private String getCurrentRequestedString() {		
 	    StringBuilder builder = new StringBuilder(requestedAl.size());
 	    for(Character ch: requestedAl)
 	    {
@@ -132,7 +142,16 @@ public class KeyRace implements Runnable  {
 	 * @param inputString String Eingabe des Spielers
 	 * @return boolean Eingabe entspricht Anforderung
 	 */
-	private boolean isInputCorrect (String inputString) {
+	public boolean isInputCorrect (String inputString) {
+		if (inputString.equals(this.getCurrentRequestedString())) {
+			return true;
+		} else {
+			return false;
+		}
+		
+		/*
+		System.out.println(inputString);
+		System.out.println(this.getReqString());
 		int trueCounter = 0; //Wir erwarten 4 Elemente also 3 muesste da rauskommen im Moment		
 		//String inputString zerlegen und in die List<Character> inputAl
 		for(char charElement : inputString.toCharArray()) {
@@ -142,7 +161,8 @@ public class KeyRace implements Runnable  {
 		//Vergleiche die List(en)<>
 		for(int i = 0; i < 4; i++) {			
 			if (requestedAl.get(i) == userInputAl.get(i)) {
-				trueCounter++;				
+				trueCounter++;
+				System.out.println(requestedAl.get(i) + " vs " + userInputAl.get(i));
 			}
 		}		
 		if (trueCounter == 3 ) {
@@ -152,6 +172,7 @@ public class KeyRace implements Runnable  {
 			correctInput = false;
 			return correctInput;
 		}	
+		*/
 	}
 	
 	

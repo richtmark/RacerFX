@@ -11,6 +11,7 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
@@ -49,9 +50,10 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     private Label idLblCountdown;
     
     // fuer den Counter der Tastenkombination
-    private static final Integer STARTTIME = 5;
-    private Timeline timeline;
-    private IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
+    private static final Integer STARTTIMEKEYCOUNTDOWN = 10; //Countdown Eingabe sek
+    private Timeline timelineKeyCountdown; //Timeline Eingabe Tastenkombination
+    private IntegerProperty timeSecondsCountdownProperty = new SimpleIntegerProperty(STARTTIMEKEYCOUNTDOWN);
+    //private StringProperty inputStringProperty;
         
     private GraphicsContext gc;
         
@@ -63,16 +65,50 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     public void initialize(URL url, ResourceBundle rb) {
     	KeyRace keyRaceObj = new KeyRace();
         // Bind the timerLabel text property to the timeSeconds property
-    	idLblCountdown.textProperty().bind(timeSeconds.asString());
-    	
+    	idLblCountdown.textProperty().bind(timeSecondsCountdownProperty.asString());
+    	//idTxfInput.textProperty().bind(inputStringProperty);
     	
     	playbutton.setOnAction(new EventHandler<ActionEvent>() {   //Eventhandler playbutton 		
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Playbutton aufgerufen");
                 keyRaceObj.start();   
+                idTxfWanted.setText(keyRaceObj.getNewRequestedString());                
                 
+                //################## Listener auf Textfield noch einfacher als unten ###########                
+                idTxfInput.textProperty().addListener((observable, oldValue, newValue) -> {
+                    System.out.println("textfield changed from " + oldValue + " to " + newValue);
+                    if(idTxfInput.getText().length() == 4) {
+                    	String tempInput = idTxfInput.getText();  
+                    	//idTxfInput.clear(); 
+                    	//naja notlösung exception zuruecksetzen textfield in listener
+                    	//http://stackoverflow.com/questions/30465313/javafx-textfield-with-listener-gives-java-lang-illegalargumentexception-the-s
+                    	Platform.runLater(() -> { 
+                        	idTxfInput.clear(); 
+                        });         
+                    	boolean tempBool = keyRaceObj.isInputCorrect(tempInput);
+                    	System.out.println("Input String ist korrekt: "  + tempBool);   
+                    	if (tempBool == true) {
+                    		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
+                    		timelineKeyCountdown.stop();
+                            timeSecondsCountdownProperty.set(STARTTIMEKEYCOUNTDOWN);
+                            timelineKeyCountdown = new Timeline();
+                            timelineKeyCountdown.getKeyFrames().add(
+                                    new KeyFrame(Duration.seconds(STARTTIMEKEYCOUNTDOWN+1),
+                                    new KeyValue(timeSecondsCountdownProperty, 0)));
+                            timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+                            //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+                            timelineKeyCountdown.playFromStart(); 
+                    	}                    	
+                    	//timelineKeyCountdown.playFromStart(); 
+                    }
+                });                
               //#############################################################################
+                
+                
+                
+                
+              //##########################Changelistener Countdown###########################
                 /*
                  * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
                  * in diesem Fall später an timeSeconds eine IntegerProperty 
@@ -80,17 +116,17 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                 final ChangeListener changeListenerCountdown = new ChangeListener() {
                     @Override
                     public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
-                      System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
+                      //System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
                       if ((int)newValue == 0) {
-                    	  System.out.println("FUBA ist 0");
-                    	  idTxfWanted.setText(keyRaceObj.getRequestedString());
+                    	  //Anfrage neue Tastenkombination
+                    	  idTxfWanted.setText(keyRaceObj.getNewRequestedString());
                       }
                     }	
                 };                
                 /*
                  * Hier wird der Listener bei der property angemeldet
                  */
-                timeSeconds.addListener(changeListenerCountdown);
+                timeSecondsCountdownProperty.addListener(changeListenerCountdown);
               //#############################################################################
                 
                 
@@ -101,17 +137,19 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                  * Die Timeline fuer den Countdown steuern
                  * 
                  */
-                if (timeline != null) {
-                    timeline.stop();
+                /*
+                if (timelineKeyCountdown != null) {
+                    timelineKeyCountdown.stop();
                 }
-                timeSeconds.set(STARTTIME);
-                timeline = new Timeline();
-                timeline.getKeyFrames().add(
-                        new KeyFrame(Duration.seconds(STARTTIME+1),
-                        new KeyValue(timeSeconds, 0)));
-                timeline.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+                */
+                timeSecondsCountdownProperty.set(STARTTIMEKEYCOUNTDOWN);
+                timelineKeyCountdown = new Timeline();
+                timelineKeyCountdown.getKeyFrames().add(
+                        new KeyFrame(Duration.seconds(STARTTIMEKEYCOUNTDOWN+1),
+                        new KeyValue(timeSecondsCountdownProperty, 0)));
+                timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
                 //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
-                timeline.playFromStart();           
+                timelineKeyCountdown.playFromStart();           
               //#############################################################################
                 
 
