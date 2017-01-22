@@ -9,6 +9,8 @@ import java.util.ResourceBundle;
 
 import Car.KeyRace;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 /**
  * Controller Hauptbildschirm 2
@@ -52,9 +55,25 @@ public class Screen2Controller implements Initializable , ControlledScreen {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Playbutton aufgerufen");
+                raceObj.start();
+                
                 //paintCar(); //WENN ES SOWEIT IST
-                raceObj.drive();
-                idTxfWanted.setText(raceObj.getwantToPressAlasString());
+                //raceObj.drive();
+                //idTxfWanted.setText(raceObj.getwantToPressAlasString());
+                /*
+                //Beispiel alle 5 Sekunden dauerhaft funktion aufrufen
+                Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        System.out.println("this is called every 5 seconds on UI thread");
+                        raceObj.run();
+                        idTxfWanted.setText(raceObj.getRequestedString());                        
+                        //System.out.println(raceObj.isInputCorrect(idTxfWanted.getText().toString()));
+                    }
+                }));
+                fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+                fiveSecondsWonder.play();
+                */
             }
         });
     	iv.setX(10); //Imageview
@@ -78,8 +97,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
 //	        	}		            
 	        }
 	    }.start();		
-    }
-    
+    }    
     
     
     //####################### SCREENWECHSEL
