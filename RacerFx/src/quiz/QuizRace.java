@@ -17,14 +17,15 @@ public class QuizRace {
 	}
 	
 	/**
-	 * gibt ein zufaelliges Questionobjekt zurueck
+	 * gibt ein zufaelliges QuestionModel -Objekt zurueck
 	 * 
 	 * @return QuestionModel
 	 */
-	public void getRandomQuestion() {
+	public QuestionModel getRandomQuestion() {
         int index = randomQuestionIndex.nextInt(objQuestionPool.getObjQuestionList().size());
         objCurrentModel = objQuestionPool.getObjQuestionList().get(index);
-        System.out.println(objCurrentModel.getQuestiontext());
+        //System.out.println(objCurrentModel.getQuestiontext());
+        return objCurrentModel;
 	}
 	
 

@@ -13,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class KeyRace implements Runnable  {		
+public class KeyRace {		//implements Runnable 
 	
 	//######################################################################################
 	//########################### Klassenvariablen ######################################
@@ -27,7 +27,7 @@ public class KeyRace implements Runnable  {
 	//private ClientCar car;
 	//private String inputString; 
 	Thread keyRaceThread; //das ganze als eigener Thread siehe Konstruktor
-	private boolean isPlaying; //keyRace aktiv?
+	//private boolean isPlaying; //keyRace aktiv?
 	
 	
 		
@@ -40,14 +40,14 @@ public class KeyRace implements Runnable  {
 	 * 
 	 */
 	public KeyRace() {
-		isPlaying = false;
+		//isPlaying = false;
 		alphabet = new char[]{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 		requestedAl = new ArrayList<Character>();
 		//userInputAl = new ArrayList<Character>();
 		rndAlphaIndex = new Random();
 		correctInput = false;		
 		//inputString = "";
-		keyRaceThread = new Thread(this, "keyRaceThread");
+		//keyRaceThread = new Thread(this, "keyRaceThread");
 	}	
 	
 	
@@ -56,29 +56,36 @@ public class KeyRace implements Runnable  {
 	//######################################################################################
 	
 	//RunnableObjekt Startmethode, hier beginnt der Thread
+	/*
 	public void start() {
 		keyRaceThread.start();
 		isPlaying = true;
-	}		
+	}
+	*/		
 	
 	/**
 	 * Getter - Thread/Spiel noch laeuft
 	 * @return boolean 
 	 */
+	/*
 	public boolean getIsPlaying() {
 		return isPlaying;
 	}
+	*/
 
+	
 	/**
 	 * Setter - Thread/Spiel stoppen
 	 * ToDo logik quatsch
 	 * @param isPlaying
 	 */
+	/*
 	public void stopPlaying() {
 		this.isPlaying = false;
 		this.keyRaceThread.interrupt();
 		//countInstance = 0;  //TODO macht hier keinen Sinn da im static und im Konstruktor		
 	}
+	*/
 	
 	
 	/** 
@@ -208,7 +215,8 @@ public class KeyRace implements Runnable  {
 		}			
 	}	
 
-	@Override
+	//@Override
+	/*
 	public void run() {		
 		// TODO Auto-generated method stub
 		while (true) {
@@ -216,6 +224,7 @@ public class KeyRace implements Runnable  {
 			//keyDrive();		
 		}
 	}
+	*/
 
 }
 

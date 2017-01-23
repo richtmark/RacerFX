@@ -33,6 +33,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
+import quiz.QuestionModel;
 import quiz.QuizRace;
 
 /**
@@ -42,9 +43,8 @@ public class Screen2Controller implements Initializable , ControlledScreen {
 	private Image carImage = new Image (getClass().getResource("/resources/dragcarpic.jpg").toString());
 	ImageView iv = new ImageView(carImage);
 	
-    ScreensController myController; //Der Controller fuer die Szenenwechsel
-	
-    
+	ScreensController myController; //Der Controller fuer die Szenenwechsel
+	    
     @FXML //  fx:id="playButton" den playbutton aus der FXML holen
     private Button playbutton; // Value injected by FXMLLoader
     @FXML 
@@ -66,20 +66,22 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     @FXML
     private RadioButton idRadioButtonAnswer4;
     @FXML
-    private ToggleGroup answerToggleGroup; //RadioButtons ueber FXML zu Grp
+    private ToggleGroup answerToggleGroup; //RadioButtons ueber FXML zu Grp!
     @FXML
     private TextArea idTxtAreaQuestion;
     
-    // fuer den Counter der Tastenkombination
+    
     private static final Integer KEYSTARTTIMECOUNTDOWN = 10; //Countdown Eingabe sek
     private static final Integer QUIZSTARTTIMECOUNTDOWN = 10; //Countdown Eingabe sek
     private Timeline timelineKeyCountdown; //Timeline Eingabe Tastenkombination
     private Timeline timelineQuizCountdown; //Timeline fuer das Quiz
     private IntegerProperty propertyKeySecondsCountdown = new SimpleIntegerProperty(KEYSTARTTIMECOUNTDOWN);
     private IntegerProperty propertyQuizSecondsCountdown = new SimpleIntegerProperty(QUIZSTARTTIMECOUNTDOWN);
+    private QuizRace quizRaceObj;
+    private KeyRace keyRaceObj;
+    private QuestionModel questionObjekt;
     //private StringProperty inputStringProperty;
-    
-    
+        
         
     private GraphicsContext gc;
         
@@ -88,31 +90,45 @@ public class Screen2Controller implements Initializable , ControlledScreen {
      * Initializieren der Controllerklasse
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-    	idRadioButtonAnswer1.setUserData("1"); //value zuweisen
+    public void initialize(URL url, ResourceBundle rb) {    	
+    	idRadioButtonAnswer1.setUserData("1"); //value zuweisen nicht da auf die schnelle nicht gefunden in FXML...
     	idRadioButtonAnswer2.setUserData("2");
     	idRadioButtonAnswer3.setUserData("3");
-    	idRadioButtonAnswer4.setUserData("4");
+    	idRadioButtonAnswer4.setUserData("4");   	
     	
-    	//myController.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> System.out.println("Pressed: "+event.getCode()));    	
-    	KeyRace keyRaceObj = new KeyRace();
-    	QuizRace quizRaceObj = new QuizRace();
+    	//ToDo Keydown event immer focus auf eingabefeld wenn moeglich...
+    	//myController.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> System.out.println("Pressed: "+event.getCode()));   
+    	    	
+    	keyRaceObj = new KeyRace();    	
+    	quizRaceObj = new QuizRace(); //QuizRaceObjekt mit Zugriff auf QuestionPool und QuestionModel
+    	questionObjekt = new QuestionModel();
+    	questionObjekt = quizRaceObj.getRandomQuestion(); //neues QuestionModel anfragen 
+    	idTxtAreaQuestion.setText(questionObjekt.getQuestiontext());
+    	idRadioButtonAnswer1.setText(questionObjekt.getAnswerOne());
+    	idRadioButtonAnswer2.setText(questionObjekt.getAnswerTwo());
+    	idRadioButtonAnswer3.setText(questionObjekt.getAnswerThree());
+    	idRadioButtonAnswer4.setText(questionObjekt.getAnswerFour());
+    	
+    	
+    	
+    	
         //das Label idLblKeyCountdown(FXML) text property binden an eigene property Integer propertyKeySecondsCountdown 
     	idLblKeyCountdown.textProperty().bind(propertyKeySecondsCountdown.asString());
     	idLblQuizCountdown.textProperty().bind(propertyQuizSecondsCountdown.asString());
     	//idTxfInput.textProperty().bind(inputStringProperty);
-    	
-    	
+    	    	
     	playbutton.setOnAction(new EventHandler<ActionEvent>() {   //Eventhandler playbutton 		
             @Override
             public void handle(ActionEvent event) {
             	//###########################################################################
-            	//###########################a allgemeine Initialisierung ##################
-            	//##########################################################################
+            	//###########################a allgemeine Initialisierung ###################
+            	//###########################################################################
                 System.out.println("Playbutton aufgerufen");
-                keyRaceObj.start();   
+                //keyRaceObj.start();   
                 idTxfWanted.setText(keyRaceObj.getNewRequestedString());        
-              //#############################################################################
+              //#################################################################################
+        
+                
                 
                 //#######################Timeline Countdown Key##################################
                 /*
@@ -133,9 +149,11 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                 timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
                 //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
                 timelineKeyCountdown.playFromStart();           
-              //#############################################################################
+              //############################################################################
                 
-                //#######################Timeline Countdown Quiz##################################
+                
+                
+                //#######################Timeline Countdown Quiz############################
                 /*
                  * 
                  * Die Timeline fuer den Countdown Quiz steuern
@@ -155,7 +173,8 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                 //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
                 timelineQuizCountdown.playFromStart();           
               //#############################################################################
-                               
+
+                
                 
                 
             	//###########################################################################
@@ -163,21 +182,41 @@ public class Screen2Controller implements Initializable , ControlledScreen {
             	//###########################################################################
                 
                                 
-              //###########################a Listener ToggelAntworten ##################
+              //################ Listener ToggelAntworten + Timelinereset via neue Timeline ##################
                 answerToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
                     public void changed(ObservableValue<? extends Toggle> ov,
                         Toggle old_toggle, Toggle new_toggle) {
                             if (answerToggleGroup.getSelectedToggle() != null) {
-                            	System.out.println(answerToggleGroup.getSelectedToggle().getUserData().toString());
+                            	//pruefe Antwort
+                            	if (answerToggleGroup.getSelectedToggle().getUserData().equals(questionObjekt.getTrueAnswerString())) {
+                            		System.out.println("Answert true");
+                            	}
+                            	//System.out.println(answerToggleGroup.getSelectedToggle().getUserData().toString());
+                            	answerToggleGroup.getSelectedToggle().setSelected(false);                            	
                             	//group.getSelectedToggle().getUserData().toString();
-                            	quizRaceObj.getRandomQuestion();
+                            	questionObjekt = quizRaceObj.getRandomQuestion(); //neues QuestionModel anfragen 
+                            	idTxtAreaQuestion.setText(questionObjekt.getQuestiontext());
+                            	idRadioButtonAnswer1.setText(questionObjekt.getAnswerOne());
+                            	idRadioButtonAnswer2.setText(questionObjekt.getAnswerTwo());
+                            	idRadioButtonAnswer3.setText(questionObjekt.getAnswerThree());
+                            	idRadioButtonAnswer4.setText(questionObjekt.getAnswerFour());
+                            	//und auch hier direkt timeline nach antwort zuruecksetzen
+                        		timelineQuizCountdown.stop();
+                                propertyQuizSecondsCountdown.set(QUIZSTARTTIMECOUNTDOWN);
+                                timelineQuizCountdown = new Timeline();
+                                timelineQuizCountdown.getKeyFrames().add(
+                                        new KeyFrame(Duration.seconds(QUIZSTARTTIMECOUNTDOWN+1),
+                                        new KeyValue(propertyQuizSecondsCountdown, 0)));
+                                timelineQuizCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+                                //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+                                timelineQuizCountdown.playFromStart();   
                             }                
                         }
                 });     
               //#############################################################################
                 
                 
-                //################## Listener auf Textfield  Keyeingabe (noch einfacher als unten) ###########                
+                //################## Listener auf Textfield  Keyeingabe (noch einfacher als unten) + Timelinereset via neue Timeline ###########                
                 idTxfInput.textProperty().addListener((observable, oldValue, newValue) -> {
                     System.out.println("textfield changed from " + oldValue + " to " + newValue);
                     if(idTxfInput.getText().length() == 4) {
@@ -210,12 +249,12 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                 
                 
                 
-              //########################## Changelistener Countdown (label) ###########################
+              //######################## Changelistener Countdown Timeline Key (label) #########################
                 /*
                  * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
                  * in diesem Fall später an timeSeconds eine IntegerProperty 
                  */
-                final ChangeListener changeListenerCountdown = new ChangeListener() {
+                final ChangeListener changeListenerCountdownKey = new ChangeListener() {
                     @Override
                     public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
                       //System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
@@ -228,8 +267,39 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                 /*
                  * Hier wird der Listener bei der property angemeldet
                  */
-                propertyKeySecondsCountdown.addListener(changeListenerCountdown);
+                propertyKeySecondsCountdown.addListener(changeListenerCountdownKey);
+                
+                
               //#############################################################################
+                
+                //######################## Changelistener Countdown Quiz (label) #########################
+                /*
+                 * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
+                 * in diesem Fall später an timeSeconds eine IntegerProperty 
+                 */
+                final ChangeListener changeListenerCountdownQuiz = new ChangeListener() {
+                    @Override
+                    public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
+                      //System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
+                    	if ((int)newValue == 0) {
+	                    	  //Anfrage neue Tastenkombination
+	                      	questionObjekt = quizRaceObj.getRandomQuestion(); //neues QuestionModel anfragen 
+	                    	idTxtAreaQuestion.setText(questionObjekt.getQuestiontext());
+	                    	idRadioButtonAnswer1.setText(questionObjekt.getAnswerOne());
+	                    	idRadioButtonAnswer2.setText(questionObjekt.getAnswerTwo());
+	                    	idRadioButtonAnswer3.setText(questionObjekt.getAnswerThree());
+	                    	idRadioButtonAnswer4.setText(questionObjekt.getAnswerFour());
+                      }
+                    }	
+                };                
+                /*
+                 * Hier wird der Listener bei der property angemeldet
+                 */
+                propertyQuizSecondsCountdown.addListener(changeListenerCountdownQuiz);
+              //#############################################################################
+                
+                
+                
             }
         });
     	iv.setX(10); //Imageview
@@ -256,7 +326,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     }    
     
     
-    //####################### SCREENWECHSEL
+    //####################### SCREENWECHSEL #########################
     
     //Screenparent setzen
     public void setScreenParent(ScreensController screenParent){
@@ -271,10 +341,5 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     @FXML
     private void goToScreen3(ActionEvent event){
        myController.setScreen(ScreensFramework.screen3ID);
-    }
-    
-    
-    
-    
-    
+    }    
 }
