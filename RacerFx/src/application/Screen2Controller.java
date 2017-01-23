@@ -31,6 +31,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 import quiz.QuizRace;
 
@@ -53,7 +54,9 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     @FXML
     private TextField idTxfWanted;
     @FXML
-    private Label idLblCountdown;
+    private Label idLblKeyCountdown;
+    @FXML
+    private Label idLblQuizCountdown;
     @FXML
     private RadioButton idRadioButtonAnswer1;    
     @FXML
@@ -68,12 +71,14 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     private TextArea idTxtAreaQuestion;
     
     // fuer den Counter der Tastenkombination
-    private static final Integer STARTTIMEKEYCOUNTDOWN = 10; //Countdown Eingabe sek
+    private static final Integer KEYSTARTTIMECOUNTDOWN = 10; //Countdown Eingabe sek
+    private static final Integer QUIZSTARTTIMECOUNTDOWN = 10; //Countdown Eingabe sek
     private Timeline timelineKeyCountdown; //Timeline Eingabe Tastenkombination
-    private IntegerProperty timeSecondsCountdownProperty = new SimpleIntegerProperty(STARTTIMEKEYCOUNTDOWN);
+    private Timeline timelineQuizCountdown; //Timeline fuer das Quiz
+    private IntegerProperty propertyKeySecondsCountdown = new SimpleIntegerProperty(KEYSTARTTIMECOUNTDOWN);
+    private IntegerProperty propertyQuizSecondsCountdown = new SimpleIntegerProperty(QUIZSTARTTIMECOUNTDOWN);
     //private StringProperty inputStringProperty;
     
-
     
         
     private GraphicsContext gc;
@@ -89,20 +94,76 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     	idRadioButtonAnswer3.setUserData("3");
     	idRadioButtonAnswer4.setUserData("4");
     	
+    	//myController.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> System.out.println("Pressed: "+event.getCode()));    	
     	KeyRace keyRaceObj = new KeyRace();
     	QuizRace quizRaceObj = new QuizRace();
-        // Bind the timerLabel text property to the timeSeconds property
-    	idLblCountdown.textProperty().bind(timeSecondsCountdownProperty.asString());
+        //das Label idLblKeyCountdown(FXML) text property binden an eigene property Integer propertyKeySecondsCountdown 
+    	idLblKeyCountdown.textProperty().bind(propertyKeySecondsCountdown.asString());
+    	idLblQuizCountdown.textProperty().bind(propertyQuizSecondsCountdown.asString());
     	//idTxfInput.textProperty().bind(inputStringProperty);
+    	
     	
     	playbutton.setOnAction(new EventHandler<ActionEvent>() {   //Eventhandler playbutton 		
             @Override
             public void handle(ActionEvent event) {
+            	//###########################################################################
+            	//###########################a allgemeine Initialisierung ##################
+            	//##########################################################################
                 System.out.println("Playbutton aufgerufen");
                 keyRaceObj.start();   
                 idTxfWanted.setText(keyRaceObj.getNewRequestedString());        
+              //#############################################################################
+                
+                //#######################Timeline Countdown Key##################################
+                /*
+                 * 
+                 * Die Timeline fuer den Countdown Key steuern
+                 * 
+                 */
+                /*
+                if (timelineKeyCountdown != null) {
+                    timelineKeyCountdown.stop();
+                }
+                */
+                propertyKeySecondsCountdown.set(KEYSTARTTIMECOUNTDOWN);
+                timelineKeyCountdown = new Timeline();
+                timelineKeyCountdown.getKeyFrames().add(
+                        new KeyFrame(Duration.seconds(KEYSTARTTIMECOUNTDOWN+1),
+                        new KeyValue(propertyKeySecondsCountdown, 0)));
+                timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+                //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+                timelineKeyCountdown.playFromStart();           
+              //#############################################################################
+                
+                //#######################Timeline Countdown Quiz##################################
+                /*
+                 * 
+                 * Die Timeline fuer den Countdown Quiz steuern
+                 * 
+                 */
+                /*
+                if (timelineKeyCountdown != null) {
+                    timelineKeyCountdown.stop();
+                }
+                */
+                propertyQuizSecondsCountdown.set(QUIZSTARTTIMECOUNTDOWN);
+                timelineQuizCountdown = new Timeline();
+                timelineQuizCountdown.getKeyFrames().add(
+                        new KeyFrame(Duration.seconds(QUIZSTARTTIMECOUNTDOWN+1),
+                        new KeyValue(propertyQuizSecondsCountdown, 0)));
+                timelineQuizCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+                //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+                timelineQuizCountdown.playFromStart();           
+              //#############################################################################
+                               
+                
+                
+            	//###########################################################################
+            	//########################### Listener alle #################################
+            	//###########################################################################
                 
                                 
+              //###########################a Listener ToggelAntworten ##################
                 answerToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
                     public void changed(ObservableValue<? extends Toggle> ov,
                         Toggle old_toggle, Toggle new_toggle) {
@@ -112,11 +173,11 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                             	quizRaceObj.getRandomQuestion();
                             }                
                         }
-                });                
+                });     
+              //#############################################################################
                 
                 
-                
-                //################## Listener auf Textfield noch einfacher als unten ###########                
+                //################## Listener auf Textfield  Keyeingabe (noch einfacher als unten) ###########                
                 idTxfInput.textProperty().addListener((observable, oldValue, newValue) -> {
                     System.out.println("textfield changed from " + oldValue + " to " + newValue);
                     if(idTxfInput.getText().length() == 4) {
@@ -132,11 +193,11 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                     	if (tempBool == true) {
                     		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
                     		timelineKeyCountdown.stop();
-                            timeSecondsCountdownProperty.set(STARTTIMEKEYCOUNTDOWN);
+                            propertyKeySecondsCountdown.set(KEYSTARTTIMECOUNTDOWN);
                             timelineKeyCountdown = new Timeline();
                             timelineKeyCountdown.getKeyFrames().add(
-                                    new KeyFrame(Duration.seconds(STARTTIMEKEYCOUNTDOWN+1),
-                                    new KeyValue(timeSecondsCountdownProperty, 0)));
+                                    new KeyFrame(Duration.seconds(KEYSTARTTIMECOUNTDOWN+1),
+                                    new KeyValue(propertyKeySecondsCountdown, 0)));
                             timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
                             //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
                             timelineKeyCountdown.playFromStart(); 
@@ -149,7 +210,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                 
                 
                 
-              //##########################Changelistener Countdown###########################
+              //########################## Changelistener Countdown (label) ###########################
                 /*
                  * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
                  * in diesem Fall später an timeSeconds eine IntegerProperty 
@@ -167,35 +228,8 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                 /*
                  * Hier wird der Listener bei der property angemeldet
                  */
-                timeSecondsCountdownProperty.addListener(changeListenerCountdown);
+                propertyKeySecondsCountdown.addListener(changeListenerCountdown);
               //#############################################################################
-                
-                
-                
-              //#############################################################################
-                /*
-                 * 
-                 * Die Timeline fuer den Countdown steuern
-                 * 
-                 */
-                /*
-                if (timelineKeyCountdown != null) {
-                    timelineKeyCountdown.stop();
-                }
-                */
-                timeSecondsCountdownProperty.set(STARTTIMEKEYCOUNTDOWN);
-                timelineKeyCountdown = new Timeline();
-                timelineKeyCountdown.getKeyFrames().add(
-                        new KeyFrame(Duration.seconds(STARTTIMEKEYCOUNTDOWN+1),
-                        new KeyValue(timeSecondsCountdownProperty, 0)));
-                timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
-                //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
-                timelineKeyCountdown.playFromStart();           
-              //#############################################################################
-                
-
-                
-
             }
         });
     	iv.setX(10); //Imageview
