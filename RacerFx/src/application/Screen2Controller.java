@@ -7,10 +7,16 @@ package application;
 import java.net.URL;
 import java.util.ResourceBundle;
 import Car.KeyRace;
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.ParallelTransition;
+import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.animation.PathTransition.OrientationType;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -20,6 +26,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -32,6 +40,13 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.util.Duration;
 import quiz.QuestionModel;
 import quiz.QuizRace;
@@ -40,15 +55,15 @@ import quiz.QuizRace;
  * Controller Hauptbildschirm 2
  */
 public class Screen2Controller implements Initializable , ControlledScreen {
-	private Image carImage = new Image (getClass().getResource("/resources/dragcarpic.jpg").toString());
+	private Image carImage = new Image (getClass().getResource("/resources/car_blue.png").toString());
 	ImageView iv = new ImageView(carImage);
 	
 	ScreensController myController; //Der Controller fuer die Szenenwechsel
 	    
     @FXML //  fx:id="playButton" den playbutton aus der FXML holen
     private Button playbutton; // Value injected by FXMLLoader
-    @FXML 
-    private Canvas gamecanvas;
+    //@FXML 
+    //private Canvas gamecanvas;
     @FXML
     private TextField idTxfInput;
     @FXML
@@ -69,7 +84,11 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     private ToggleGroup answerToggleGroup; //RadioButtons ueber FXML zu Grp!
     @FXML
     private TextArea idTxtAreaQuestion;
-    
+    @FXML
+    private ImageView idBackgroundImageView; 
+    @FXML
+    private Canvas idCanvas;
+
     
     private static final Integer KEYSTARTTIMECOUNTDOWN = 10; //Countdown Eingabe sek
     private static final Integer QUIZSTARTTIMECOUNTDOWN = 10; //Countdown Eingabe sek
@@ -81,7 +100,8 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     private KeyRace keyRaceObj;
     private QuestionModel questionObjekt;
     //private StringProperty inputStringProperty;
-        
+    private double megai=0;
+
         
     private GraphicsContext gc;
         
@@ -90,7 +110,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
      * Initializieren der Controllerklasse
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {    	
+    public void initialize(URL url, ResourceBundle rb) {       	
     	idRadioButtonAnswer1.setUserData("1"); //value zuweisen nicht da auf die schnelle nicht gefunden in FXML...
     	idRadioButtonAnswer2.setUserData("2");
     	idRadioButtonAnswer3.setUserData("3");
@@ -258,6 +278,8 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                     @Override
                     public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
                       //System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
+                    	megai = megai+10;
+                    	idBackgroundImageView.translateXProperty().set(megai);
                       if ((int)newValue == 0) {
                     	  //Anfrage neue Tastenkombination
                     	  idTxfWanted.setText(keyRaceObj.getNewRequestedString());
@@ -297,13 +319,15 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                  */
                 propertyQuizSecondsCountdown.addListener(changeListenerCountdownQuiz);
               //#############################################################################
-                
-                
-                
+                                             
             }
         });
     	iv.setX(10); //Imageview
-    	gc = gamecanvas.getGraphicsContext2D();	//die Canvas     	    	
+    	//gc = gamecanvas.getGraphicsContext2D();	//die Canvas    
+    	
+    	
+    	
+    	
     }
     
     //#########################################################
