@@ -335,7 +335,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     	
     	//####################################Rollbild ###############################	
 
-
+    	/*
         PathElement[] path = 
         {
         	new MoveTo(300, -8790), //bild bei 300, -8850 im Container
@@ -362,7 +362,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                }
             }
         }); 
-        
+           
         
         
         
@@ -382,6 +382,17 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                           anim.play();     
                     });
         
+         */ 
+    	//BACKGROUND_WIDTH=500;
+        TranslateTransition translateTransition =
+                new TranslateTransition(Duration.millis(5000), idBackgroundImageView);
+         translateTransition.setFromY(0);
+         translateTransition.setToY(1 * 17700);
+         translateTransition.setInterpolator(Interpolator.LINEAR);
+         translateTransition.setCycleCount(1);
+         translateTransition.play();
+         
+         
     }
     
     //#########################################################
