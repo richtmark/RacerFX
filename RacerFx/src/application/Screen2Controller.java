@@ -105,8 +105,8 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     private KeyRace keyRaceObj;
     private QuestionModel questionObjekt;    
     private double stop;
-    private double speedduration;
-    private PathTransition anim;
+    private double speedduration;   
+    TranslateTransition translateTransition;
 
         
 
@@ -207,12 +207,12 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                             	if (answerToggleGroup.getSelectedToggle().getUserData().equals(questionObjekt.getTrueAnswerString())) {
                             		System.out.println("Answert true Quiz");
                             		speedduration = speedduration+1;
-                            		anim.setRate(speedduration);
+                            		translateTransition.setRate(speedduration);
 
                             	} else {
                             		System.out.println("Answert false Quiz");                            		
                             		speedduration = speedduration-1;
-                            		anim.setRate(speedduration);
+                            		translateTransition.setRate(speedduration);
                             	}
                             	//System.out.println(answerToggleGroup.getSelectedToggle().getUserData().toString());
                             	answerToggleGroup.getSelectedToggle().setSelected(false); 
@@ -256,7 +256,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                     	if (tempBool == true) {
                     		System.out.println("KeyString korrekt: "  + tempBool); 
                     		speedduration = speedduration+1;
-                    		anim.setRate(speedduration);
+                    		translateTransition.setRate(speedduration);
                     		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
                     		timelineKeyCountdown.stop();
                             propertyKeySecondsCountdown.set(KEYSTARTTIMECOUNTDOWN);
@@ -271,7 +271,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                     		//ToDo speed manipulieren
                     		System.out.println("KeyString false: "  + tempBool); 
                     		speedduration = speedduration-1;
-                    		anim.setRate(speedduration);
+                    		translateTransition.setRate(speedduration);
                     	}
                     	//timelineKeyCountdown.playFromStart(); 
                     }
@@ -384,13 +384,22 @@ public class Screen2Controller implements Initializable , ControlledScreen {
         
          */ 
     	//BACKGROUND_WIDTH=500;
-        TranslateTransition translateTransition =
-                new TranslateTransition(Duration.millis(5000), idBackgroundImageView);
+         translateTransition =  new TranslateTransition(Duration.millis(250000), idBackgroundImageView);
+         translateTransition.setRate(speedduration);
          translateTransition.setFromY(0);
          translateTransition.setToY(1 * 17700);
          translateTransition.setInterpolator(Interpolator.LINEAR);
          translateTransition.setCycleCount(1);
-         translateTransition.play();
+         //translateTransition.play();
+         playbutton.setOnMouseClicked(me -> 
+         {
+           Animation.Status status = translateTransition.getStatus();
+           if (status == Animation.Status.RUNNING &&
+               status != Animation.Status.PAUSED)
+        	   translateTransition.pause();
+           else
+        	   translateTransition.play();     
+         });
          
          
     }
