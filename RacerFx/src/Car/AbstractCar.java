@@ -3,40 +3,42 @@ package Car;
 public abstract class AbstractCar {
 	
 	private String name;
-	private double position;
-	private double velocity;
-	private int speed;
-	private boolean drive;
+	private double positionX;
+	private double positionY;
+	private int speedfaktor;
+	private boolean isDriving;
+	private boolean finish;
+	private String time;
 	
-	public double getPosition() {
-		return position;
+	public double getPositionX() {
+		return positionX;
 	}
 	
-	public void setPosition(double position) {
-		this.position = position;
+	public void setPositionX(double position) {
+		this.positionX = position;
 	}
 	
-	public double getVelocity() {
-		return velocity;
+	public double getPositionY() {
+		return positionY;
 	}
 	
-	public void setVelocity(double velocity) {
-		this.velocity = velocity;
-	}
-	
+	public void setPositionY(double position) {
+		this.positionY = position;
+	}	
+
 	public int getSpeed() {
-		return speed;
+		return speedfaktor;
 	}
 	public void setSpeed(int speed) {
-		this.speed = speed;
+		this.speedfaktor = speed;
 	}
 
 	public boolean isDrive() {
-		return drive;
+		return isDriving;
 	}
 
 	public void setDrive(boolean drive) {
-		this.drive = drive;
+		this.isDriving = drive;
 	}
 
 	public String getName() {

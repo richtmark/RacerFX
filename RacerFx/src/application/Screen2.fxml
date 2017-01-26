@@ -28,6 +28,7 @@
                   <Image url="@../../bin/resources/car_blue_small.png" />
                </image>
             </ImageView>
+            <Label fx:id="idRaceTimerLabel" layoutX="284.0" layoutY="14.0" text="Label" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
          <children>

@@ -1,5 +1,6 @@
 package Car;
 
-public class ClientCar {
+public class ClientCar extends AbstractCar {
+	
 	
 }
