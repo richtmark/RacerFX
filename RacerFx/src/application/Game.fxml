@@ -50,14 +50,14 @@
                      </children></AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="241.0" prefWidth="379.0">
                      <children>
-                        <RadioButton fx:id="idRadioButtonAnswer1" layoutX="14.0" layoutY="122.0" mnemonicParsing="false" text="RadioButton">
+                        <RadioButton fx:id="idRadioButtonAnswer1" layoutX="14.0" layoutY="122.0" mnemonicParsing="false" text="RadioButton" wrapText="true">
                            <toggleGroup>
                               <ToggleGroup fx:id="answerToggleGroup" />
                            </toggleGroup></RadioButton>
-                        <RadioButton fx:id="idRadioButtonAnswer2" layoutX="14.0" layoutY="153.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$answerToggleGroup" />
-                        <RadioButton fx:id="idRadioButtonAnswer3" layoutX="14.0" layoutY="181.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$answerToggleGroup" />
-                        <RadioButton fx:id="idRadioButtonAnswer4" layoutX="14.0" layoutY="213.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$answerToggleGroup" />
-                        <TextArea fx:id="idTxtAreaQuestion" layoutX="11.0" layoutY="31.0" prefHeight="76.0" prefWidth="333.0" />
+                        <RadioButton fx:id="idRadioButtonAnswer2" layoutX="14.0" layoutY="153.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$answerToggleGroup" wrapText="true" />
+                        <RadioButton fx:id="idRadioButtonAnswer3" layoutX="14.0" layoutY="181.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$answerToggleGroup" wrapText="true" />
+                        <RadioButton fx:id="idRadioButtonAnswer4" layoutX="14.0" layoutY="213.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$answerToggleGroup" wrapText="true" />
+                        <TextArea fx:id="idTxtAreaQuestion" layoutX="11.0" layoutY="31.0" prefHeight="76.0" prefWidth="333.0" wrapText="true" />
                         <Label fx:id="idLblQuizCountdown" layoutX="25.0" layoutY="7.0" text="Label" />
                         <ProgressBar fx:id="idLblCountdownQuizProgressbar" layoutX="86.0" layoutY="6.0" prefWidth="200.0" progress="1.0" />
                      </children></AnchorPane>

@@ -386,7 +386,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
          translateTransitionParalaxAnim.setRate(speedduration);
          //translateTransition.setOrientation(OrientationType.NONE);
          translateTransitionParalaxAnim.setFromY(0);
-         translateTransitionParalaxAnim.setToY(20330); //bei 17700 px ist das Auto ueber der Ziellinie das nehmen wir mal als Endpunkt
+         translateTransitionParalaxAnim.setToY(20305); //bei 17700 px ist das Auto ueber der Ziellinie das nehmen wir mal als Endpunkt
          translateTransitionParalaxAnim.setInterpolator(Interpolator.LINEAR);
          translateTransitionParalaxAnim.setCycleCount(1);
     }
