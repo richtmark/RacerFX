@@ -29,7 +29,7 @@
                </image>
             </ImageView>
             <Label fx:id="idRaceTimerLabel" layoutX="335.0" layoutY="22.0" text="Label" />
-            <Pane fx:id="idPaneHighscore" prefHeight="246.0" prefWidth="700.0">
+            <Pane fx:id="idPaneHighscore" prefHeight="246.0" prefWidth="700.0" visible="false">
                <children>
                   <Label fx:id="idInfoLabelHighscore" layoutX="266.0" layoutY="63.0" text="Trage Dich in die Highscore ein!" />
                   <TextField fx:id="idTxfHighscore" layoutX="280.0" layoutY="98.0" prefHeight="25.0" prefWidth="87.0" />

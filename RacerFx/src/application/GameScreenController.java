@@ -436,7 +436,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	    		highScoreConnection.insertHighscore(idTxfHighscore.getText(), idRaceTimerLabel.getText());
     	    		idPaneHighscore.setVisible(false);
     	    		idInfoLabelHighscore.setText("Trage Dich in die Highscore ein!"); //falls schonmal falsch eingegeben wurde fuer naechsten eintrag  
-    	    		myController.loadScreen(RacerFxMain.screenHighscore, "Screen3.fxml"); //bewirkt highscorerefresh ToDo flex. Parameteruebergabe Screens
+    	    		myController.loadScreen(RacerFxMain.screenHighscore, "ScreenHighscore.fxml"); //bewirkt highscorerefresh ToDo flex. Parameteruebergabe ScreensFramwork
     	    		myController.setScreen(RacerFxMain.screenHighscore);  
     	    	} else {
     	    		idInfoLabelHighscore.setText("Bitte Namen eingeben mit maximal 7 Zeichen");    		
