@@ -25,8 +25,7 @@ public class HighscoreScreenController implements Initializable, InterfaceContro
      * Initializieren der Controllerklasse
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-    	System.out.println("FUBA");
+    public void initialize(URL url, ResourceBundle rb) {    	
     	loadHighScore();
     }
     
@@ -35,9 +34,9 @@ public class HighscoreScreenController implements Initializable, InterfaceContro
      */
     public void loadHighScore() {
     	objHighscorePool = new HighscorePool();          
-    	String myString = "NAME" + "\t\t\t\t" + "ZEIT" +"\n\n";
+    	String myString = "\t" + "NAME" + "\t\t\t\t\t" + "ZEIT" +"\n\n";
     	for (HighscoreModel element : objHighscorePool ) {
-    		myString = myString + element.getName() + "\t\t\t\t" + element.getPoints() +"\n";    		
+    		myString = myString + "\t" + element.getName() + "\t\t\t\t\t" + element.getPoints() +"\n";    		
     	}
     	idHighScoreText.setText(myString);
     }

@@ -166,8 +166,8 @@ public class GameScreenController implements Initializable , InterfaceControllSc
                                 Duration duration = ((KeyFrame)t.getSource()).getTime();
                                 timeDurrationRace = timeDurrationRace.add(duration);                              
                                 timeSecondsProperty.set(timeDurrationRace.toSeconds());
-                                //System.out.println(translateTransitionParalaxAnim.toYProperty());
-                                System.out.println(idBackgroundImageView.translateYProperty());
+                                System.out.println(speedduration); //
+                                //System.out.println(idBackgroundImageView.translateYProperty()); Backgroundimage Position debuggen
                              
                             }
                         })
@@ -269,7 +269,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
                     	boolean tempBool = keyRaceObj.isInputCorrect(tempInput);
                     	  
                     	if (tempBool == true) {
-                    		System.out.println("KeyString korrekt: "  + tempBool); 
+                    		//System.out.println("KeyString korrekt: "  + tempBool); 
                     		setSpeed(1);   
                     		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
                     		timelineKeyCountdown.stop();
@@ -284,7 +284,17 @@ public class GameScreenController implements Initializable , InterfaceControllSc
                     	} else {
                     		//ToDo speed manipulieren
                     		System.out.println("KeyString false: "  + tempBool); 
-                    		setSpeed(-1);                    		
+                    		setSpeed(-1);    
+                    		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
+                    		timelineKeyCountdown.stop();
+                            propertyKeySecondsCountdown.set(KEYSTARTTIMECOUNTDOWN);
+                            timelineKeyCountdown = new Timeline();
+                            timelineKeyCountdown.getKeyFrames().add(
+                                    new KeyFrame(Duration.seconds(KEYSTARTTIMECOUNTDOWN+1),
+                                    new KeyValue(propertyKeySecondsCountdown, 0)));
+                            timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+                            //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+                            timelineKeyCountdown.playFromStart(); 
                     	}
                     	//timelineKeyCountdown.playFromStart(); 
                     }
@@ -307,6 +317,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
                       if ((int)newValue == 0) {
                     	  //Anfrage neue Tastenkombination
                     	  idTxfWanted.setText(keyRaceObj.getNewRequestedString());
+                    	  setSpeed(-2);
                       }
                     }	
                 };                
@@ -334,7 +345,8 @@ public class GameScreenController implements Initializable , InterfaceControllSc
 	                    	idRadioButtonAnswer1.setText(questionObjekt.getAnswerOne());
 	                    	idRadioButtonAnswer2.setText(questionObjekt.getAnswerTwo());
 	                    	idRadioButtonAnswer3.setText(questionObjekt.getAnswerThree());
-	                    	idRadioButtonAnswer4.setText(questionObjekt.getAnswerFour());                    		
+	                    	idRadioButtonAnswer4.setText(questionObjekt.getAnswerFour());   
+	                    	setSpeed(-2);
                       }
                     }	
                 };                
@@ -391,12 +403,14 @@ public class GameScreenController implements Initializable , InterfaceControllSc
          translateTransitionParalaxAnim.setCycleCount(1);
     }
     
+    
+    
     /**
      * Setzt die "Geschwindigkeit" des  Hintergrundbildes. 
      * Als Integer in 1er Schritten. +1 schneller / -1 langsamer mit max 16; min 0
      * Letztendlich beeinflusst man hier die Animationsgeschwindigkeit um den Faktor
      * animation.setRate()...welcher mit animation(Duration.millis(12345) einhergeht.
-     * Das Hintergrundbild wir auf bis 17700px auf der Y-Achse nach unten verschoben.
+     * (Das Hintergrundbild wir auf bis 20305px auf der Y-Achse nach unten verschoben.
      * 
      * @param speed
      */
@@ -415,6 +429,19 @@ public class GameScreenController implements Initializable , InterfaceControllSc
         		//System.out.println(speedduration);
         		translateTransitionParalaxAnim.setRate(speedduration);
         	}
+        	break;
+        case -2:
+        	if (speedduration >= 2) {
+        		speedduration = speedduration-2;
+        		//System.out.println(speedduration);
+        		translateTransitionParalaxAnim.setRate(speedduration);
+        		break;
+        	} 
+        	if (speedduration == 1) {
+        		speedduration = speedduration-1;
+        		//System.out.println(speedduration);
+        		translateTransitionParalaxAnim.setRate(speedduration);
+        	}        	
         	break;
     	default:
             System.out.println("PseudoException ungültiger Parameter. -1/ 1 erwartet"); //ToDo Diese und andere Exceptions implementieren
