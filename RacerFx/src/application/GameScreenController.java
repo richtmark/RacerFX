@@ -166,6 +166,8 @@ public class GameScreenController implements Initializable , InterfaceControllSc
                                 Duration duration = ((KeyFrame)t.getSource()).getTime();
                                 timeDurrationRace = timeDurrationRace.add(duration);                              
                                 timeSecondsProperty.set(timeDurrationRace.toSeconds());
+                                //System.out.println(translateTransitionParalaxAnim.toYProperty());
+                                System.out.println(idBackgroundImageView.translateYProperty());
                              
                             }
                         })
@@ -384,7 +386,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
          translateTransitionParalaxAnim.setRate(speedduration);
          //translateTransition.setOrientation(OrientationType.NONE);
          translateTransitionParalaxAnim.setFromY(0);
-         translateTransitionParalaxAnim.setToY(17700); //bei 17700 px ist das Auto ueber der Ziellinie das nehmen wir mal als Endpunkt
+         translateTransitionParalaxAnim.setToY(20330); //bei 17700 px ist das Auto ueber der Ziellinie das nehmen wir mal als Endpunkt
          translateTransitionParalaxAnim.setInterpolator(Interpolator.LINEAR);
          translateTransitionParalaxAnim.setCycleCount(1);
     }

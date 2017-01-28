@@ -10,22 +10,23 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" minWidth="174.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.HighscoreScreenController">
+<AnchorPane id="AnchorPane" maxHeight="500.0" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.HighscoreScreenController">
   <children>
-      <Pane prefHeight="1.0" prefWidth="598.0">
+      <Pane maxHeight="500.0" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0">
          <children>
-        <Button layoutX="373.0" layoutY="289.0" mnemonicParsing="false" onAction="#goToScreen1" text="Go To Screen1" />
-        <Label layoutX="257.0" layoutY="288.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Highscore3">
+        <Button layoutX="437.0" layoutY="359.0" mnemonicParsing="false" onAction="#goToScreen1" text="Übersicht" />
+        <Label layoutX="305.0" layoutY="358.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Highscore">
           <font>
             <Font size="18.0" />
           </font>
         </Label>
-        <Button layoutX="120.0" layoutY="289.0" mnemonicParsing="false" onAction="#goToScreen2" text="Go To Screen2" />
+        <Button layoutX="196.0" layoutY="359.0" mnemonicParsing="false" onAction="#goToScreen2" prefHeight="25.0" prefWidth="66.0" text="Fahren" />
+            <TextArea fx:id="idHighScoreText" editable="false" focusTraversable="false" layoutX="196.0" layoutY="75.0" prefHeight="230.0" prefWidth="308.0">
+               <effect>
+                  <Glow />
+               </effect>
+            </TextArea>
          </children>
       </Pane>
-      <TextArea fx:id="idHighScoreText" editable="false" focusTraversable="false" layoutX="206.0" layoutY="44.0" prefHeight="200.0" prefWidth="200.0">
-         <effect>
-            <Glow />
-         </effect></TextArea>
   </children>
 </AnchorPane>
