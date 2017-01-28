@@ -1,3 +1,13 @@
+/**
+ * Datenmodel fuer beliebig viele Highscoreobjekte. Implementiert das Interface 
+ * Iterable<HighscoreModel> zum iterieren der einzelenen enthaltenen Objekte.
+ * 
+ * ToDo Refactoring im Zuge von ConnectionModel
+ * ToDo Refactoring Pools HighscorePool und QuestionPool zusammenlegen/abstrahieren. Zu viel Code doppelt.
+ * 
+ * @author Robert/Markus
+ */
+
 package Models;
 
 import java.util.ArrayList;

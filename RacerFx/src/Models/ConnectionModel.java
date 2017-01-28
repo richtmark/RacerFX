@@ -1,11 +1,13 @@
 package Models;
 
 /**
- * PuF WS 2016/17
- * Gruppe Kaffesachsen()
  * 
- * @author Höger/Richter
+ * Klasse stellt Methoden bereit um eine Datenbankverbindung (MySql) herzustellen.
+ * Benoetigt Treiber mysql-connector https://dev.mysql.com/downloads/connector/j/
  * 
+ * ToDo Highscore/Fragen-Methoden raus und diese Klasse vererben
+ *  
+ * @author Robert/Markus
  * 
  */
 
@@ -62,7 +64,7 @@ public class ConnectionModel {
 	}
 		   
 	/**
-	* Lese Fragen aus der Datenbank ein und schreibe sie in ArrayList
+	* Lese Fragen aus der Datenbank aus und schreibe diese in ArrayList
 	* 
 	* @return  ArrayList arrListFragen
 	*/
@@ -97,7 +99,7 @@ public class ConnectionModel {
 	}
 		    
 	/**
-	* Fügt einen neuen Highscore in die Datenbank ein
+	* Fuegt einen neuen Highscore in die Datenbank ein
 	*/
 	
 	public void insertHighscore(String Name, String Punkte) {
@@ -126,7 +128,7 @@ public class ConnectionModel {
 	}
 		    
 	/**
-	* Lese Fragen aus der Datenbank ein
+	* Lese Highscore aus der Datenbank aus
 	 * @return 
 	* 
 	* @return  Highscore

@@ -1,3 +1,14 @@
+/**
+ * Stellt Methoden bereit um die Fragen aus der Datenbank zu holen. 
+ * (siehe QuestionModel/QuestionPool)
+ * Stellt eine Methode bereit um eine zufaellige Frage aus den Fragepool zu erhalten.
+ * 
+ * ToDo Controller/Quiz-Refractoring evt. ein bisschen Logik aus den Controller hier auslagern
+ * die direkt das Quiz betreffen, der Übersicht halber.
+ * 
+ * @author Robert/Markus
+ */
+
 package race;
 
 import java.util.Random;

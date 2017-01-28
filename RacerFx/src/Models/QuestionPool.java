@@ -1,11 +1,13 @@
 package Models;
 
 /**
- * verwaltet eine Pool aus Fragen vom Typ ArrayList<QuestionModel>.
+ * verwaltet eine Pool aus beliebig vielen Fragen vom Typ ArrayList<QuestionModel>.
  * Implementiert das Interface Iterable<QuestionModel> zum iterieren
  * der einzelenen enthaltenen Objekte.
- * Holt sich die Daten aus der Datenbank und "befüllt" das Datenmodel
+ * Holt sich die Daten aus der Datenbank und "befuellt" das konkrete Datenmodel
  * QuestionModel.
+ * 
+ * @author Robert/Markus
  */
 
 import java.util.ArrayList;

@@ -1,5 +1,10 @@
 /**
-Controller Hauptbildschirm
+ * 
+ * Hauptbildschirm. Implementiert die gesamte Spiellogik.
+ * 
+ * @author Robert/Markus
+ * 
+ *
 */ 
 
 package application;
@@ -43,11 +48,9 @@ import race.KeyRace;
 import race.QuizRace;
 //import server.ClientCar;  //erstmal alles raus
 //import server.raceDienst;
-/**
- * Controller Hauptbildschirm 2
- */
-public class Screen2Controller implements Initializable , ControlledScreen {
-	ScreensController myController; //Der Controller fuer die Szenenwechsel	
+
+public class GameScreenController implements Initializable , InterfaceControllScreen {
+	MultiScreenController myController; //Der Controller fuer die Szenenwechsel	
     @FXML //  fx:id="playButton" den playbutton aus der FXML holen
     private Button playbutton; // Value injected via FXMLLoader
     //@FXML 
@@ -112,9 +115,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
      * Initializieren der Controllerklasse
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {   
-    	
-    	//System.out.println(myController.getParent().getClass().toString());
+    public void initialize(URL url, ResourceBundle rb) {     	
     	//myClientcar = new ClientCar();    	
     	//myCLientcar.run();
     	finishProperty.set(false);
@@ -389,7 +390,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     }
     
     /**
-     * Setzt die "Geschwindigkeit" des  des Hintergrundbildes. 
+     * Setzt die "Geschwindigkeit" des  Hintergrundbildes. 
      * Als Integer in 1er Schritten. +1 schneller / -1 langsamer mit max 16; min 0
      * Letztendlich beeinflusst man hier die Animationsgeschwindigkeit um den Faktor
      * animation.setRate()...welcher mit animation(Duration.millis(12345) einhergeht.
@@ -433,8 +434,8 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     	    		highScoreConnection.insertHighscore(idTxfHighscore.getText(), idRaceTimerLabel.getText());
     	    		idPaneHighscore.setVisible(false);
     	    		idInfoLabelHighscore.setText("Trage Dich in die Highscore ein!"); //falls schonmal falsch eingegeben wurde fuer naechsten eintrag  
-    	    		myController.loadScreen(ScreensFramework.screen3ID, "Screen3.fxml"); //bewirkt highscorerefresh ToDo flex. Parameteruebergabe Screens
-    	    		myController.setScreen(ScreensFramework.screen3ID);  
+    	    		myController.loadScreen(RacerFxMain.screenHighscore, "Screen3.fxml"); //bewirkt highscorerefresh ToDo flex. Parameteruebergabe Screens
+    	    		myController.setScreen(RacerFxMain.screenHighscore);  
     	    	} else {
     	    		idInfoLabelHighscore.setText("Bitte Namen eingeben mit maximal 7 Zeichen");    		
     	    	}
@@ -455,17 +456,17 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     
     
     //####################### SCREENWECHSEL #########################    
-    public void setScreenParent(ScreensController screenParent){
+    public void setScreenParent(MultiScreenController screenParent){
         myController = screenParent;
     }
 
     @FXML
     private void goToScreen1(ActionEvent event){
-       myController.setScreen(ScreensFramework.screen1ID);
+       myController.setScreen(RacerFxMain.screenSplash);
     }
     
     @FXML
     private void goToScreen3(ActionEvent event){
-       myController.setScreen(ScreensFramework.screen3ID);
+       myController.setScreen(RacerFxMain.screenHighscore);
     }    
 }

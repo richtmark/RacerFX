@@ -1,6 +1,10 @@
 /**
- * Klasse erzeugt Tastenkobimation die der Spieler in einem bestimmten zeitrahmen eingeben muss
- * ToDo Runnable sinnlos hier im Moment
+ * 
+ * Klasse erzeugt Tastenkombination die der Spieler in einem bestimmten Zeitrahmen 
+ * eingeben muss. Stellt Methoden bereit diese Eingaben zu validieren.
+ * 
+ *  @author Robert/Markus
+ * 
  */
 
 

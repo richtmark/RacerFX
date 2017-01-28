@@ -1,6 +1,8 @@
 /**
- * Das einfache Datenmodel einer einzelnen Frage. Vorerst fest mit einer moegl. wahren Antwort
+ * Datenmodel einer einzelnen Frage. Vorerst fest mit einer moegl. wahren Antwort
  * und immer vier Antwortmoeglichkeiten. 
+ * 
+ * @author Robert/Markus
  * 
  */
 

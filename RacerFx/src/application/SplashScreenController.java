@@ -7,13 +7,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
- * Controller Klasse Startscreen 1
+ * Controller SplashScreen
  *
- * @author robert
+ * @author Robert/Markus
  */
-public class Screen1Controller implements Initializable, ControlledScreen {
+public class SplashScreenController implements Initializable, InterfaceControllScreen {
 
-    ScreensController myController;
+    MultiScreenController myController;
     /**
      * Initializes the controller class.
      */
@@ -22,17 +22,17 @@ public class Screen1Controller implements Initializable, ControlledScreen {
         // TODO
     }
     
-    public void setScreenParent(ScreensController screenParent){
+    public void setScreenParent(MultiScreenController screenParent){
         myController = screenParent;
     }
 
     @FXML
     private void goToScreen2(ActionEvent event){
-       myController.setScreen(ScreensFramework.screen2ID);
+       myController.setScreen(RacerFxMain.screenGame);
     }
     
     @FXML
     private void goToScreen3(ActionEvent event){
-       myController.setScreen(ScreensFramework.screen3ID);
+       myController.setScreen(RacerFxMain.screenHighscore);
     }
 }

@@ -1,5 +1,10 @@
 /** 
- * ScreenController. Die Controllerklasse zum Wechseln der Ansichten.
+ * MultiScreenController. Diese Controllerklasse steuert den wechsel zwischen 
+ * den einzelnen Controllern  (und damit verbunden der verschiedenen Ansichten).
+ * Verwaltet in HashMap. Stellt Methoden bereit zum laden, wechseln und entfernen
+ * einzelnenr Screens. 
+ * 
+ * @author Robert/Markus
  */
 
 package application;
@@ -18,32 +23,47 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 
-public class ScreensController extends StackPane {
-    //Holds the screens to be displayed
+public class MultiScreenController extends StackPane {
+  
+    //Key-Value zum verwalten der Ansichten 
     private HashMap<String, Node> screens = new HashMap<>();
     
-    public ScreensController() {
+    public MultiScreenController() {
         super();
     }
 
-    //Add the screen to the collection
+    /**
+     * Fuege einen Screen der HashMap zu
+     * @param name
+     * @param screen
+     */
     public void addScreen(String name, Node screen) {
         screens.put(name, screen);
     }
 
-    //Returns the Node with the appropriate name
+    /**
+     * Gibt die Node zurueck (also 
+     * ein Item aus dem Scene-Graph) in diesem Fall den
+     * Screen
+     * @param name Screenname
+     * @return boolean
+     */
     public Node getScreen(String name) {
         return screens.get(name);
     }
 
-    //Loads the fxml file, add the screen to the screens collection and
-    //finally injects the screenPane to the controller.
+    /**
+     * Lade die FXML-Datei und fuege sie der Hashmap zu.
+     * Verbindet den Screen mit dem Controller. Resource 
+     * ist hier die FXML.
+     * 
+     */
     public boolean loadScreen(String name, String resource) {
         try {
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
-            Parent loadScreen = (Parent) myLoader.load();
-            ControlledScreen myScreenControler = ((ControlledScreen) myLoader.getController());
-            myScreenControler.setScreenParent(this);
+            FXMLLoader objParentLoader = new FXMLLoader(getClass().getResource(resource));
+            Parent loadScreen = (Parent) objParentLoader.load();
+            InterfaceControllScreen objScreenController = ((InterfaceControllScreen) objParentLoader.getController());
+            objScreenController.setScreenParent(this);
             addScreen(name, loadScreen);
             return true;
         } catch (Exception e) {
@@ -52,10 +72,13 @@ public class ScreensController extends StackPane {
         }
     }
 
-    //This method tries to displayed the screen with a predefined name.
-    //First it makes sure the screen has been already loaded.  Then if there is more than
-    //one screen the new screen is been added second, and then the current screen is removed.
-    // If there isn't any screen being displayed, the new screen is just added to the root.
+
+    /**
+     * Zur Anzeige (also auch Ansichtwechsel) eines bereits geladenen Screens.
+     * Fading-Effekt Screenwechsel/Screenanzeige.
+     * @param name Screenname
+     * @return boolean
+     */
     public boolean setScreen(final String name) {       
         if (screens.get(name) != null) {   //screen loaded
             final DoubleProperty opacity = opacityProperty();
@@ -66,8 +89,10 @@ public class ScreensController extends StackPane {
                         new KeyFrame(new Duration(1000), new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent t) {
-                        getChildren().remove(0);                    //remove the displayed screen
-                        getChildren().add(0, screens.get(name));     //add the screen
+                    	//alten Screen entfernen
+                        getChildren().remove(0);   
+                        //neuen Screen zufuegen
+                        getChildren().add(0, screens.get(name));     
                         Timeline fadeIn = new Timeline(
                                 new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                                 new KeyFrame(new Duration(800), new KeyValue(opacity, 1.0)));
@@ -86,15 +111,22 @@ public class ScreensController extends StackPane {
             }
             return true;
         } else {
-            System.out.println("screen hasn't been loaded!!! \n");
+        	/*
+        	 * Ursachen:
+        	 * - FXML fehlerhaft
+        	 * - falsche @FXML referenzen in Controller
+        	 * - Fehler in der Initialize-Methode eines konkreten Controllers
+        	 */
+            System.out.println("setScreen()-Error. Fehler beim Laden des Screens.");
             return false;
         }
-    }   
+    }           
     
-    
-    
-
-    //This method will remove the screen with the given name from the collection of screens
+    /**
+     * Methode zum entfernen eines Screens aus der HashMap-Sammlung
+     * @param name Screenname
+     * @return boolean 
+     */
     public boolean unloadScreen(String name) {
         if (screens.remove(name) == null) {
             System.out.println("Screen didn't exist");
