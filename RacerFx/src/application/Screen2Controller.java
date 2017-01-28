@@ -6,7 +6,9 @@ package application;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import Car.KeyRace;
+
+import Models.ConnectionModel;
+import Models.QuestionModel;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -14,8 +16,10 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
@@ -33,18 +37,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import quiz.QuestionModel;
-import quiz.QuizRace;
-import server.ClientCar;
-
+import race.KeyRace;
+import race.QuizRace;
+//import server.ClientCar;  //erstmal alles raus
+//import server.raceDienst;
 /**
  * Controller Hauptbildschirm 2
  */
 public class Screen2Controller implements Initializable , ControlledScreen {
-	ScreensController myController; //Der Controller fuer die Szenenwechsel	    
+	ScreensController myController; //Der Controller fuer die Szenenwechsel	
     @FXML //  fx:id="playButton" den playbutton aus der FXML holen
-    private Button playbutton; // Value injected by FXMLLoader
+    private Button playbutton; // Value injected via FXMLLoader
     //@FXML 
     //private Canvas gamecanvas;
     @FXML
@@ -75,8 +80,15 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     private ImageView idimagecar; //Auto
     @FXML 
     private Label idRaceTimerLabel;
-
-    
+    @FXML
+    private Button idOkHighscore;
+    @FXML
+    private Label idInfoLabelHighscore;
+    @FXML
+    private TextField idTxfHighscore;
+    @FXML
+    private Pane idPaneHighscore;    
+        
     
     private static final Integer KEYSTARTTIMECOUNTDOWN = 10; //Countdown Eingabe sek
     private static final Integer QUIZSTARTTIMECOUNTDOWN = 10; //Countdown Eingabe sek
@@ -91,19 +103,22 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     private TranslateTransition translateTransitionParalaxAnim; //Parallax Hintergrund Animation
     private Timeline timelineRaceTime; //Die Zeit vom Start bis zur Zielankunft
     private DoubleProperty timeSecondsProperty = new SimpleDoubleProperty();
-    private Duration timeDurrationRace = Duration.ZERO;
-    private ClientCar myClientcar;
+    private Duration timeDurrationRace = Duration.ZERO;   
+    private BooleanProperty finishProperty = new SimpleBooleanProperty();    
+    //private ClientCar myClientcar; //ClientServer erst mal alles rausgenommen
                 
 
     /**
      * Initializieren der Controllerklasse
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {    
-    	myClientcar = new ClientCar();    	
+    public void initialize(URL url, ResourceBundle rb) {   
+    	
+    	//System.out.println(myController.getParent().getClass().toString());
+    	//myClientcar = new ClientCar();    	
     	//myCLientcar.run();
-    	idRaceTimerLabel.textProperty().bind(timeSecondsProperty.asString());
-    	  	    	
+    	finishProperty.set(false);
+    	idRaceTimerLabel.textProperty().bind(timeSecondsProperty.asString());    	  	    	
     	speedduration = 0;
     	idRadioButtonAnswer1.setUserData("1"); //value zuweisen ToDo per FXML
     	idRadioButtonAnswer2.setUserData("2");
@@ -129,7 +144,11 @@ public class Screen2Controller implements Initializable , ControlledScreen {
     	    	
     	playbutton.setOnAction(new EventHandler<ActionEvent>() {   //Eventhandler playbutton 		
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(ActionEvent event) {            	
+            	
+         	   translateTransitionParalaxAnim.play(); 
+         	   playbutton.setDisable(true);
+            	
             	//###########################################################################
             	//###########################a allgemeine Initialisierung ###################
             	//###########################################################################
@@ -144,8 +163,7 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                             @Override
                             public void handle(ActionEvent t) {
                                 Duration duration = ((KeyFrame)t.getSource()).getTime();
-                                timeDurrationRace = timeDurrationRace.add(duration);
-                              
+                                timeDurrationRace = timeDurrationRace.add(duration);                              
                                 timeSecondsProperty.set(timeDurrationRace.toSeconds());
                              
                             }
@@ -201,11 +219,11 @@ public class Screen2Controller implements Initializable , ControlledScreen {
                             	System.out.println("Toggle");
                             	//pruefe Antwort
                             	if (answerToggleGroup.getSelectedToggle().getUserData().equals(questionObjekt.getTrueAnswerString())) {
-                            		System.out.println("Answert true Quiz");
+                            		//System.out.println("Answer true Quiz");
                             		setSpeed(1);                            		
 
                             	} else {
-                            		System.out.println("Answert false Quiz");                            		
+                            		//System.out.println("Answer false Quiz");                            		
                             		setSpeed(-1);                            		
                             	}
                             	//System.out.println(answerToggleGroup.getSelectedToggle().getUserData().toString());
@@ -326,6 +344,20 @@ public class Screen2Controller implements Initializable , ControlledScreen {
         }); 	
     	
     	
+    	//##############AKTIONEN BEI RENNENDE ##########################
+    	finishProperty.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                // Only if completed
+                if (finishProperty.get()) {
+                	raceIsFinished();
+                	setHighscore();                	
+                	//myController.setScreen(ScreensFramework.screen4ID);
+                }
+            }
+        });    	
+    	
+    	
         //######################## Changelistener Racetime #########################
         /*
          * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
@@ -335,8 +367,10 @@ public class Screen2Controller implements Initializable , ControlledScreen {
             public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
               //System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
               Animation.Status status = translateTransitionParalaxAnim.getStatus();
-              if (status == Animation.Status.STOPPED) {
-            	  timelineRaceTime.stop();            	  
+              //System.out.println(idBackgroundImageView.getTranslateY());
+              //myClientcar.setPositionY(idBackgroundImageView.getTranslateY());
+              if (status == Animation.Status.STOPPED) {            	  
+            	  finishProperty.set(true);
               }              
             }	
         };                
@@ -344,35 +378,23 @@ public class Screen2Controller implements Initializable , ControlledScreen {
          * Hier wird der Listener bei der property angemeldet
          */
         timeSecondsProperty.addListener(changeListenerRaceTime);                
-      //#############################################################################
-   	
-
-
-    	//BACKGROUND_WIDTH=500;
+      //#############################################################################   	
          translateTransitionParalaxAnim =  new TranslateTransition(Duration.millis(250000), idBackgroundImageView);
          translateTransitionParalaxAnim.setRate(speedduration);
          //translateTransition.setOrientation(OrientationType.NONE);
          translateTransitionParalaxAnim.setFromY(0);
-         translateTransitionParalaxAnim.setToY(1 * 17700);
+         translateTransitionParalaxAnim.setToY(17700); //bei 17700 px ist das Auto ueber der Ziellinie das nehmen wir mal als Endpunkt
          translateTransitionParalaxAnim.setInterpolator(Interpolator.LINEAR);
          translateTransitionParalaxAnim.setCycleCount(1);
-         //translateTransition.play();
-         playbutton.setOnMouseClicked(me -> 
-         {        	
-           Animation.Status status = translateTransitionParalaxAnim.getStatus();
-           if (status == Animation.Status.RUNNING && status != Animation.Status.PAUSED) {
-        	   translateTransitionParalaxAnim.pause();
-           }
-           else {
-        	   translateTransitionParalaxAnim.play();  
-           }
-         });         
     }
     
     /**
-     * Setzt die "Geschwindigkeit" des Wagens 0-15. Als
-     * Int in 1er Schritten.
-     * +1 schneller / -1 langsamer mit max 15; min 0
+     * Setzt die "Geschwindigkeit" des  des Hintergrundbildes. 
+     * Als Integer in 1er Schritten. +1 schneller / -1 langsamer mit max 16; min 0
+     * Letztendlich beeinflusst man hier die Animationsgeschwindigkeit um den Faktor
+     * animation.setRate()...welcher mit animation(Duration.millis(12345) einhergeht.
+     * Das Hintergrundbild wir auf bis 17700px auf der Y-Achse nach unten verschoben.
+     * 
      * @param speed
      */
     private void setSpeed(int speed) {
@@ -381,25 +403,58 @@ public class Screen2Controller implements Initializable , ControlledScreen {
         	if (speedduration <= 15) {
         		speedduration = speedduration+1;
         		translateTransitionParalaxAnim.setRate(speedduration);
-        		System.out.println(speedduration);        		
+        		//System.out.println(speedduration);        		
         	}
         	break;
         case -1:
         	if (speedduration > 0) {
         		speedduration = speedduration-1;
-        		System.out.println(speedduration);
+        		//System.out.println(speedduration);
         		translateTransitionParalaxAnim.setRate(speedduration);
         	}
         	break;
     	default:
-            System.out.println("PseudoException ungültiger Parameter. -1/ 1 erwartet");
+            System.out.println("PseudoException ungültiger Parameter. -1/ 1 erwartet"); //ToDo Diese und andere Exceptions implementieren
         }
     }   
     
     
     
+    /**
+     * Eintragen logik Highscore. Einblenden/Ausblenden des Inputpanels und der zugehoerigen
+     * Steuerelemente. Screenwechsel zur Highscoreuebersicht
+     */
+    private void setHighscore() {
+    	ConnectionModel highScoreConnection = new ConnectionModel();
+    	idPaneHighscore.setVisible(true);
+    	idOkHighscore.setOnAction(new EventHandler<ActionEvent>() {
+    	    @Override public void handle(ActionEvent e) {
+    	    	if (idTxfHighscore.getText().length() > 0 && idTxfHighscore.getText().length() <=7) {
+    	    		highScoreConnection.insertHighscore(idTxfHighscore.getText(), idRaceTimerLabel.getText());
+    	    		idPaneHighscore.setVisible(false);
+    	    		idInfoLabelHighscore.setText("Trage Dich in die Highscore ein!"); //falls schonmal falsch eingegeben wurde fuer naechsten eintrag  
+    	    		myController.loadScreen(ScreensFramework.screen3ID, "Screen3.fxml"); //bewirkt highscorerefresh ToDo flex. Parameteruebergabe Screens
+    	    		myController.setScreen(ScreensFramework.screen3ID);  
+    	    	} else {
+    	    		idInfoLabelHighscore.setText("Bitte Namen eingeben mit maximal 7 Zeichen");    		
+    	    	}
+    	    }
+    	});    	
+    }    
+        
+    /**
+     * Wird aufgerufen wenn das Rennenbeendet ist.
+     * Logik Rundenende. Stoppt die Timelines (Threads).  
+     * Steuerelemente zuruecksetzen.
+     */
+    private void raceIsFinished() {
+    	timelineRaceTime.stop();
+    	timelineQuizCountdown.stop();
+    	timelineKeyCountdown.stop();    	
+    }    
+    
+    
     //####################### SCREENWECHSEL #########################    
-    //Screenparent setzen
     public void setScreenParent(ScreensController screenParent){
         myController = screenParent;
     }

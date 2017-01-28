@@ -1,6 +1,9 @@
-package quiz;
+package race;
 
 import java.util.Random;
+
+import Models.QuestionModel;
+import Models.QuestionPool;
 
 public class QuizRace {
 	private QuestionPool objQuestionPool;

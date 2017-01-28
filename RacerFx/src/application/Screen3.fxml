@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Screen3 --> 
 
+<!-- Screen3 -->
+
+<?import javafx.scene.effect.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
@@ -8,18 +10,22 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" minWidth="174.0" prefHeight="150.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml" fx:controller="application.Screen3Controller">
+<AnchorPane id="AnchorPane" minWidth="174.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Screen3Controller">
   <children>
-    <VBox alignment="CENTER" prefHeight="153.0" prefWidth="174.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <children>
-        <Label text="Screen 3">
+      <Pane prefHeight="1.0" prefWidth="598.0">
+         <children>
+        <Button layoutX="373.0" layoutY="289.0" mnemonicParsing="false" onAction="#goToScreen1" text="Go To Screen1" />
+        <Label layoutX="257.0" layoutY="288.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Highscore3">
           <font>
             <Font size="18.0" />
           </font>
         </Label>
-        <Button mnemonicParsing="false" onAction="#goToScreen1" text="Go To Screen1" />
-        <Button mnemonicParsing="false" onAction="#goToScreen2" text="Go To Screen2" />
-      </children>
-    </VBox>
+        <Button layoutX="120.0" layoutY="289.0" mnemonicParsing="false" onAction="#goToScreen2" text="Go To Screen2" />
+         </children>
+      </Pane>
+      <TextArea fx:id="idHighScoreText" editable="false" focusTraversable="false" layoutX="206.0" layoutY="44.0" prefHeight="200.0" prefWidth="200.0">
+         <effect>
+            <Glow />
+         </effect></TextArea>
   </children>
 </AnchorPane>

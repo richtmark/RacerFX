@@ -1,11 +1,10 @@
-package quiz;
+package Models;
 
 /**
  * PuF WS 2016/17
  * Gruppe Kaffesachsen()
  * 
  * @author Höger/Richter
- * @version 1.1
  * 
  * 
  */
@@ -19,9 +18,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 
-public class DatabaseConnection {
+public class ConnectionModel {
 	
 	private ArrayList<String> arrListFragen;	
+	private ArrayList<String> arrListHighscore;
 	private static Connection conn = null;
 		 
 	// Hostname
@@ -39,12 +39,12 @@ public class DatabaseConnection {
 	// Datenbankpasswort
 	final String dbPassword = "mcqueen";
 	
-	public DatabaseConnection() { 
+	public ConnectionModel() { 
 			
 		arrListFragen = new ArrayList<String>();
+		arrListHighscore = new ArrayList<String>();
 			
-		try {
-		 
+		try {		 
 			// Datenbanktreiber für ODBC Schnittstellen laden.
 		      
 			Class.forName("com.mysql.jdbc.Driver");
@@ -93,13 +93,6 @@ public class DatabaseConnection {
 		          e.printStackTrace();
 		        }
 		}
-		      
-//	            // Debug - print out Arraylist
-//
-//	            for(int i=0; i < arrListFragen.size(); i++) {
-//	            	System.out.println( arrListFragen.get( i ) );
-//	            }
-		
 	     	return arrListFragen;
 	}
 		    
@@ -107,8 +100,8 @@ public class DatabaseConnection {
 	* Fügt einen neuen Highscore in die Datenbank ein
 	*/
 	
-	public void insertHighscore(String Name, int Punkte) {
-		   
+	public void insertHighscore(String Name, String Punkte) {
+		Double punkteDouble =  Double.parseDouble(Punkte);		   
 		if(conn != null) {
 			
 			try {
@@ -121,7 +114,7 @@ public class DatabaseConnection {
 				preparedStatement.setString(1, Name);
 		          
 				// Zweites Fragezeichen durch "Punkte" Parameter ersetzen
-				preparedStatement.setLong(2, Punkte);
+				preparedStatement.setDouble(2, punkteDouble);
 		          
 				// SQL ausführen.
 				preparedStatement.executeUpdate();
@@ -139,10 +132,8 @@ public class DatabaseConnection {
 	* @return  Highscore
 	*/
 
-	public void getHighscore() {
-		   
-		if(conn != null) {
-			
+	public ArrayList<String> getHighscore() {		   
+		if(conn != null) {			
 			// Anfrage-Statement erzeugen.
 			Statement query;
 			try {
@@ -154,14 +145,15 @@ public class DatabaseConnection {
 		   
 				while (result.next()) {
 					String name = result.getString("name"); 
-					long punkte = result.getLong("punkte");
-					String highscore = name + "\t\t\t" + punkte;
-//		        // Debug
-					System.out.println(highscore);
-				}
+					Double punkte = result.getDouble("punkte");
+					String highscore = name + "#" + punkte;
+					//System.out.println(highscore);
+					arrListHighscore.add(highscore);
+				}				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
+		return arrListHighscore; //kaese
 	}
 }

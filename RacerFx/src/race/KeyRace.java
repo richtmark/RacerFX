@@ -4,7 +4,7 @@
  */
 
 
-package Car;
+package race;
 
 import java.util.ArrayList;
 import java.util.List;

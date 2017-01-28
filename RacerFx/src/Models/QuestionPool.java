@@ -1,4 +1,4 @@
-package quiz;
+package Models;
 
 /**
  * verwaltet eine Pool aus Fragen vom Typ ArrayList<QuestionModel>.
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class QuestionPool implements Iterable<QuestionModel> {	
-	private DatabaseConnection objDbConnection; 
+	private ConnectionModel objDbConnection; 
 	private ArrayList<QuestionModel> objQuestionPoolList = new ArrayList<QuestionModel>();
 	private ArrayList<String> rawArrayListFromDb;
 		
@@ -20,7 +20,7 @@ public class QuestionPool implements Iterable<QuestionModel> {
 	 * Konstruktor Standard
 	 */
 	public QuestionPool() {
-		objDbConnection = new DatabaseConnection();
+		objDbConnection = new ConnectionModel();
 		rawArrayListFromDb = new ArrayList<String>();
 		rawArrayListFromDb = objDbConnection.getQuestions();
 		rawDbToQuestionPool(); 

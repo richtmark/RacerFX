@@ -1,20 +1,20 @@
 /**
  * Das einfache Datenmodel einer einzelnen Frage. Vorerst fest mit einer moegl. wahren Antwort
- * und immer vier Antwortmoeglichkeiten. * 
+ * und immer vier Antwortmoeglichkeiten. 
+ * 
  */
 
-package quiz;
+package Models;
 
 public class QuestionModel {
 	
-	private String questiontext; 	//Der Fragetext
-	private String answerOne;		//Antwort ...
+	private String questiontext; 	 //Der Fragetext
+	private String answerOne;		 //Antwort ...
 	private String answerTwo;
 	private String answerThree;
 	private String answerFour;	
-	private String trueAnswerString;		//nummer der korrekten Antwort erstmal als String
-	
-	
+	private String trueAnswerString; //nummer der korrekten Antwort erstmal als String
+		
 	public String getQuestiontext() {
 		return questiontext;
 	}
