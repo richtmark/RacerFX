@@ -157,7 +157,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
                 idTxfWanted.setText(keyRaceObj.getNewRequestedString());                      
                 
                 
-              //############################TIMELINE RACE#####################################
+              //############################TIMELINE RACE #####################################
                 timelineRaceTime = new Timeline(
                         new KeyFrame(Duration.millis(10),
                         new EventHandler<ActionEvent>() {
