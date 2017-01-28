@@ -142,7 +142,7 @@ public class ConnectionModel {
 				query = conn.createStatement();
 		   
 				// Ergebnistabelle erzeugen und abholen.
-				String sql = "SELECT * FROM highscore " + "ORDER BY punkte DESC LIMIT 10"; //Limit 10 bewirkt das nur die besten 10 Spieler nach Punkten sortiert angezeigt werden
+				String sql = "SELECT * FROM highscore " + "ORDER BY punkte ASC LIMIT 100"; //Limit 10 bewirkt das nur die besten 10 Spieler nach Zeit sortiert angezeigt werden
 				ResultSet result = query.executeQuery(sql);
 		   
 				while (result.next()) {
