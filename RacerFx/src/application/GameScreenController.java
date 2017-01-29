@@ -123,7 +123,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	finishProperty.set(false);
     	idRaceTimerLabel.textProperty().bind(timeSecondsProperty.asString());    	  	    	
     	//speedduration = 0;
-    	idRadioButtonAnswer1.setUserData("1"); //value zuweisen ToDo per FXML
+    	idRadioButtonAnswer1.setUserData("1"); //value zuweisen ToDo per FXML fuba
     	idRadioButtonAnswer2.setUserData("2");
     	idRadioButtonAnswer3.setUserData("3");
     	idRadioButtonAnswer4.setUserData("4");       	
