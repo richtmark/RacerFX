@@ -104,16 +104,15 @@ public class ConnectionModel {
 	
 	public void insertHighscore(String Name, String Punkte) {
 		Double punkteDouble =  Double.parseDouble(Punkte);		   
-		if(conn != null) {
-			
-			try {
-		   
+		if(conn != null) {			
+			try {		
+				String tempName = Name.replaceAll(" ", "");
 				// Insert-Statement erzeugen (Fragezeichen werden später ersetzt).
 				String sql = "INSERT INTO highscore(name, punkte) " + "VALUES(?, ?)";
 				PreparedStatement preparedStatement = conn.prepareStatement(sql);
 		          
 				// Erstes Fragezeichen durch "Name" Parameter ersetzen
-				preparedStatement.setString(1, Name);
+				preparedStatement.setString(1, tempName);
 		          
 				// Zweites Fragezeichen durch "Punkte" Parameter ersetzen
 				preparedStatement.setDouble(2, punkteDouble);

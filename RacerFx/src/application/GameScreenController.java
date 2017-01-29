@@ -102,12 +102,13 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     private QuizRace quizRaceObj; //Steuerung Quiz
     private KeyRace keyRaceObj; //Steuerung Tastenkomination
     private QuestionModel questionObjekt; //Ein einzelnes Frageobjekt   
-    private double speedduration;   //die Animationsrate der Prallax-Animation
+    private int speedduration;
+    //private Integer speedduration;   //die Animationsrate der Prallax-Animation
     private TranslateTransition translateTransitionParalaxAnim; //Parallax Hintergrund Animation
     private Timeline timelineRaceTime; //Die Zeit vom Start bis zur Zielankunft
     private DoubleProperty timeSecondsProperty = new SimpleDoubleProperty();
     private Duration timeDurrationRace = Duration.ZERO;   
-    private BooleanProperty finishProperty = new SimpleBooleanProperty();    
+    private BooleanProperty finishProperty = new SimpleBooleanProperty();  
     //private ClientCar myClientcar; //ClientServer erst mal alles rausgenommen
                 
 
@@ -116,11 +117,12 @@ public class GameScreenController implements Initializable , InterfaceControllSc
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {     	
+    	speedduration = 1;
     	//myClientcar = new ClientCar();    	
     	//myCLientcar.run();
     	finishProperty.set(false);
     	idRaceTimerLabel.textProperty().bind(timeSecondsProperty.asString());    	  	    	
-    	speedduration = 0;
+    	//speedduration = 0;
     	idRadioButtonAnswer1.setUserData("1"); //value zuweisen ToDo per FXML
     	idRadioButtonAnswer2.setUserData("2");
     	idRadioButtonAnswer3.setUserData("3");
@@ -140,226 +142,122 @@ public class GameScreenController implements Initializable , InterfaceControllSc
         //das Label idLblKeyCountdown(FXML) text property binden an eigene property Integer propertyKeySecondsCountdown 
     	idLblKeyCountdown.textProperty().bind(propertyKeySecondsCountdown.asString());
     	idLblQuizCountdown.textProperty().bind(propertyQuizSecondsCountdown.asString());   
-
-    	
     	    	
     	playbutton.setOnAction(new EventHandler<ActionEvent>() {   //Eventhandler playbutton 		
-            @Override
-            public void handle(ActionEvent event) {            	
-            	
+    		@Override
+            public void handle(ActionEvent event) {    
+    		   contemporaryTimelineStart();
          	   translateTransitionParalaxAnim.play(); 
-         	   playbutton.setDisable(true);
-            	
-            	//###########################################################################
-            	//###########################a allgemeine Initialisierung ###################
-            	//###########################################################################
-                System.out.println("Playbutton aufgerufen");               
-                idTxfWanted.setText(keyRaceObj.getNewRequestedString());                      
-                
-                
-              //############################TIMELINE RACE #####################################
-                timelineRaceTime = new Timeline(
-                        new KeyFrame(Duration.millis(10),
-                        new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent t) {
-                                Duration duration = ((KeyFrame)t.getSource()).getTime();
-                                timeDurrationRace = timeDurrationRace.add(duration);                              
-                                timeSecondsProperty.set(timeDurrationRace.toSeconds());
-                                System.out.println(speedduration); //
-                                //System.out.println(idBackgroundImageView.translateYProperty()); Backgroundimage Position debuggen
-                             
-                            }
-                        })
-                    );
-                    timelineRaceTime.setCycleCount(Timeline.INDEFINITE);
-                    timelineRaceTime.play();
-        
-                
-                
-                //#######################Timeline Countdown Key##################################
-                propertyKeySecondsCountdown.set(KEYSTARTTIMECOUNTDOWN);
-                timelineKeyCountdown = new Timeline();
-                timelineKeyCountdown.getKeyFrames().add(
-                        new KeyFrame(Duration.seconds(KEYSTARTTIMECOUNTDOWN+1),
-                        new KeyValue(propertyKeySecondsCountdown, 0)));
-                timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
-                //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
-                timelineKeyCountdown.playFromStart();           
-              //############################################################################
-                
-                
-                
-                //#######################Timeline Countdown Quiz############################
-                /*
-                 * 
-                 * Die Timeline fuer den Countdown Quiz steuern
-                 *             
-                */
-                propertyQuizSecondsCountdown.set(QUIZSTARTTIMECOUNTDOWN);
-                timelineQuizCountdown = new Timeline();
-                timelineQuizCountdown.getKeyFrames().add(
-                        new KeyFrame(Duration.seconds(QUIZSTARTTIMECOUNTDOWN+1),
-                        new KeyValue(propertyQuizSecondsCountdown, 0)));
-                timelineQuizCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
-                //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
-                timelineQuizCountdown.playFromStart();           
-              //#############################################################################
-
-                
-                
-                
-            	//###########################################################################
-            	//########################### Listener alle #################################
-            	//###########################################################################
-                
-                                
-              //################ Listener ToggelAntworten + Timelinereset via neue Timeline ##################
-                answerToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-                    public void changed(ObservableValue<? extends Toggle> ov,
-                        Toggle old_toggle, Toggle new_toggle) {
-                            if (answerToggleGroup.getSelectedToggle() != null) {
-                            	System.out.println("Toggle");
-                            	//pruefe Antwort
-                            	if (answerToggleGroup.getSelectedToggle().getUserData().equals(questionObjekt.getTrueAnswerString())) {
-                            		//System.out.println("Answer true Quiz");
-                            		setSpeed(1);                            		
-
-                            	} else {
-                            		//System.out.println("Answer false Quiz");                            		
-                            		setSpeed(-1);                            		
-                            	}
-                            	//System.out.println(answerToggleGroup.getSelectedToggle().getUserData().toString());
-                            	answerToggleGroup.getSelectedToggle().setSelected(false); 
-                            	idTxfInput.requestFocus(); //Focus am besten immer auf das Textfeld
-                            	//group.getSelectedToggle().getUserData().toString();
-                            	questionObjekt = quizRaceObj.getRandomQuestion(); //neues QuestionModel anfragen 
-                            	idTxtAreaQuestion.setText(questionObjekt.getQuestiontext());
-                            	idRadioButtonAnswer1.setText(questionObjekt.getAnswerOne());
-                            	idRadioButtonAnswer2.setText(questionObjekt.getAnswerTwo());
-                            	idRadioButtonAnswer3.setText(questionObjekt.getAnswerThree());
-                            	idRadioButtonAnswer4.setText(questionObjekt.getAnswerFour());
-                            	//und auch hier direkt timeline nach antwort zuruecksetzen
-                        		timelineQuizCountdown.stop();
-                                propertyQuizSecondsCountdown.set(QUIZSTARTTIMECOUNTDOWN);
-                                timelineQuizCountdown = new Timeline();
-                                timelineQuizCountdown.getKeyFrames().add(
-                                        new KeyFrame(Duration.seconds(QUIZSTARTTIMECOUNTDOWN+1),
-                                        new KeyValue(propertyQuizSecondsCountdown, 0)));
-                                timelineQuizCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
-                                //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
-                                timelineQuizCountdown.playFromStart();   
-                            }                
-                        }
-                });     
-              //#############################################################################
-                
-                
-                //################## Listener auf Textfield  Keyeingabe (noch einfacher als unten) + Timelinereset via neue Timeline ###########                
-                idTxfInput.textProperty().addListener((observable, oldValue, newValue) -> {
-                    //System.out.println("textfield changed from " + oldValue + " to " + newValue);
-                    if(idTxfInput.getText().length() == 4) {
-                    	String tempInput = idTxfInput.getText();  
-                    	//idTxfInput.clear(); 
-                    	//naja notlösung exception zuruecksetzen textfield in listener
-                    	//http://stackoverflow.com/questions/30465313/javafx-textfield-with-listener-gives-java-lang-illegalargumentexception-the-s
-                    	Platform.runLater(() -> { 
-                        	idTxfInput.clear(); 
-                        });         
-                    	boolean tempBool = keyRaceObj.isInputCorrect(tempInput);
-                    	  
-                    	if (tempBool == true) {
-                    		//System.out.println("KeyString korrekt: "  + tempBool); 
-                    		setSpeed(1);   
-                    		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
-                    		timelineKeyCountdown.stop();
-                            propertyKeySecondsCountdown.set(KEYSTARTTIMECOUNTDOWN);
-                            timelineKeyCountdown = new Timeline();
-                            timelineKeyCountdown.getKeyFrames().add(
-                                    new KeyFrame(Duration.seconds(KEYSTARTTIMECOUNTDOWN+1),
-                                    new KeyValue(propertyKeySecondsCountdown, 0)));
-                            timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
-                            //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
-                            timelineKeyCountdown.playFromStart(); 
-                    	} else {
-                    		//ToDo speed manipulieren
-                    		System.out.println("KeyString false: "  + tempBool); 
-                    		setSpeed(-1);    
-                    		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
-                    		timelineKeyCountdown.stop();
-                            propertyKeySecondsCountdown.set(KEYSTARTTIMECOUNTDOWN);
-                            timelineKeyCountdown = new Timeline();
-                            timelineKeyCountdown.getKeyFrames().add(
-                                    new KeyFrame(Duration.seconds(KEYSTARTTIMECOUNTDOWN+1),
-                                    new KeyValue(propertyKeySecondsCountdown, 0)));
-                            timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
-                            //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
-                            timelineKeyCountdown.playFromStart(); 
-                    	}
-                    	//timelineKeyCountdown.playFromStart(); 
-                    }
-                });                
-              //#############################################################################
-                
-                     
-                
-                
-                
-              //######################## Changelistener Countdown Timeline Key (label) #########################
-                /*
-                 * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
-                 * in diesem Fall später an timeSeconds eine IntegerProperty 
-                 */
-                final ChangeListener changeListenerCountdownKey = new ChangeListener() {
-                    @Override
-                    public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
-                      //System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
-                      if ((int)newValue == 0) {
-                    	  //Anfrage neue Tastenkombination
-                    	  idTxfWanted.setText(keyRaceObj.getNewRequestedString());
-                    	  setSpeed(-2);
-                      }
-                    }	
-                };                
-                /*
-                 * Hier wird der Listener bei der property angemeldet
-                 */
-                propertyKeySecondsCountdown.addListener(changeListenerCountdownKey);                
-              //#############################################################################
-                
-                
-                
-                //######################## Changelistener Countdown Quiz (label) #########################
-                /*
-                 * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
-                 * in diesem Fall später an timeSeconds eine IntegerProperty 
-                 */
-                final ChangeListener changeListenerCountdownQuiz = new ChangeListener() {
-                    @Override
-                    public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
-                    	//System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
-                    	if ((int)newValue == 0) {
-	                    	  //Anfrage neue Tastenkombination
-	                      	questionObjekt = quizRaceObj.getRandomQuestion(); //neues QuestionModel anfragen 
-	                    	idTxtAreaQuestion.setText(questionObjekt.getQuestiontext());
-	                    	idRadioButtonAnswer1.setText(questionObjekt.getAnswerOne());
-	                    	idRadioButtonAnswer2.setText(questionObjekt.getAnswerTwo());
-	                    	idRadioButtonAnswer3.setText(questionObjekt.getAnswerThree());
-	                    	idRadioButtonAnswer4.setText(questionObjekt.getAnswerFour());   
-	                    	setSpeed(-2);
-                      }
-                    }	
-                };                
-                /*
-                 * Hier wird der Listener bei der property angemeldet
-                 */
-                propertyQuizSecondsCountdown.addListener(changeListenerCountdownQuiz);
-              //#############################################################################                                             
+         	   playbutton.setDisable(true);             
+               idTxfWanted.setText(keyRaceObj.getNewRequestedString());               
             }
-        }); 	
+        }); 
+    	
+    	//############################################################################################
+    	//########################### Alle Listener intialisieren ####################################
+    	//############################################################################################                
+                        
+      //################ Listener ToggelAntworten + Timelinereset via neue Timeline ##################
+        answerToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+            public void changed(ObservableValue<? extends Toggle> ov,
+                Toggle old_toggle, Toggle new_toggle) {
+                    if (answerToggleGroup.getSelectedToggle() != null) {
+                    	System.out.println("Toggle");
+                    	//pruefe Antwort
+                    	if (answerToggleGroup.getSelectedToggle().getUserData().equals(questionObjekt.getTrueAnswerString())) {
+                    		//System.out.println("Answer true Quiz");
+                    		setSpeed(1);                            		
+
+                    	} else {
+                    		//System.out.println("Answer false Quiz");                            		
+                    		setSpeed(-1);                            		
+                    	}
+                    	answerToggleGroup.getSelectedToggle().setSelected(false); 
+                    	idTxfInput.requestFocus(); //Focus am besten immer auf das Textfeld
+                    	questionObjekt = quizRaceObj.getRandomQuestion(); //neues QuestionModel anfragen 
+                    	idTxtAreaQuestion.setText(questionObjekt.getQuestiontext());
+                    	idRadioButtonAnswer1.setText(questionObjekt.getAnswerOne());
+                    	idRadioButtonAnswer2.setText(questionObjekt.getAnswerTwo());
+                    	idRadioButtonAnswer3.setText(questionObjekt.getAnswerThree());
+                    	idRadioButtonAnswer4.setText(questionObjekt.getAnswerFour());                           
+                    	restartTimelineQuizCountdown(); 
+                    }                
+                }
+        });     
+
+        
+        
+        //################## Listener auf Textfield  Keyeingabe (noch einfacher als unten) + Timelinereset via neue Timeline ###########                
+        idTxfInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(idTxfInput.getText().length() == 4) {
+            	String tempInput = idTxfInput.getText();  
+            	//notlösung da exception zuruecksetzen textfield in listener
+            	//http://stackoverflow.com/questions/30465313/javafx-textfield-with-listener-gives-java-lang-illegalargumentexception-the-s
+            	Platform.runLater(() -> { 
+                	idTxfInput.clear(); 
+                });         
+            	boolean tempBool = keyRaceObj.isInputCorrect(tempInput);
+            	  
+            	if (tempBool == true) {
+            		//System.out.println("KeyString korrekt: "  + tempBool); 
+            		setSpeed(1);   
+            		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
+            		restartTimelineKeyCountdown();
+            	} else {                    		
+            		System.out.println("KeyString false: "  + tempBool); 
+            		setSpeed(-1);    
+            		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
+            		restartTimelineKeyCountdown();
+            	}                    
+            }
+        });                     
+        
+        
+        
+      //######################## Changelistener Countdown Timeline Key (label) #########################
+        /*
+         * ChangeListener Countdown Eingabe Tastenkombination
+         */
+        final ChangeListener changeListenerCountdownKey = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
+              //System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
+              if ((int)newValue == 0) {
+            	  //Anfrage neue Tastenkombination
+            	  idTxfWanted.setText(keyRaceObj.getNewRequestedString());
+            	  setSpeed(-2);
+              }
+            }	
+        };
+        propertyKeySecondsCountdown.addListener(changeListenerCountdownKey);   //Hier wird der Listener bei der property angemeldet
     	
     	
-    	//##############AKTIONEN BEI RENNENDE ##########################
+    	
+
+        /*
+         * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
+         * in diesem Fall später an timeSeconds eine IntegerProperty 
+         */
+        final ChangeListener changeListenerCountdownQuiz = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
+            	//System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
+            	if ((int)newValue == 0) {
+                	  //Anfrage neue Tastenkombination
+                  	questionObjekt = quizRaceObj.getRandomQuestion(); //neues QuestionModel anfragen 
+                	idTxtAreaQuestion.setText(questionObjekt.getQuestiontext());
+                	idRadioButtonAnswer1.setText(questionObjekt.getAnswerOne());
+                	idRadioButtonAnswer2.setText(questionObjekt.getAnswerTwo());
+                	idRadioButtonAnswer3.setText(questionObjekt.getAnswerThree());
+                	idRadioButtonAnswer4.setText(questionObjekt.getAnswerFour());   
+                	setSpeed(-2);
+              }
+            }	
+        };         
+        propertyQuizSecondsCountdown.addListener(changeListenerCountdownQuiz);   //anmeldung fuer lbl
+    	
+    	
+    	//##############  Listener AKTIONEN BEI RENNENDE ##########################
     	finishProperty.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -375,39 +273,31 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	
         //######################## Changelistener Racetime #########################
         /*
-         * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
+         * Ein Changelistener auf die timeSecondsProperty - Racetime
          */
         final ChangeListener changeListenerRaceTime= new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
-              //System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
+              //System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);            	
               Animation.Status status = translateTransitionParalaxAnim.getStatus();
               //System.out.println(idBackgroundImageView.getTranslateY());
               //myClientcar.setPositionY(idBackgroundImageView.getTranslateY());
               if (status == Animation.Status.STOPPED) {            	  
             	  finishProperty.set(true);
+            	  System.out.println("Status stopped!!!");
               }              
             }	
-        };                
-        /*
-         * Hier wird der Listener bei der property angemeldet
-         */
-        timeSecondsProperty.addListener(changeListenerRaceTime);                
-      //#############################################################################   	
-         translateTransitionParalaxAnim =  new TranslateTransition(Duration.millis(250000), idBackgroundImageView);
-         translateTransitionParalaxAnim.setRate(speedduration);
-         //translateTransition.setOrientation(OrientationType.NONE);
-         translateTransitionParalaxAnim.setFromY(0);
-         translateTransitionParalaxAnim.setToY(20305); //bei 17700 px ist das Auto ueber der Ziellinie das nehmen wir mal als Endpunkt
-         translateTransitionParalaxAnim.setInterpolator(Interpolator.LINEAR);
-         translateTransitionParalaxAnim.setCycleCount(1);
+        };        
+        //Hier wird der Listener bei der property angemeldet
+        timeSecondsProperty.addListener(changeListenerRaceTime);         
+        moveParallax();
     }
     
     
     
     /**
      * Setzt die "Geschwindigkeit" des  Hintergrundbildes. 
-     * Als Integer in 1er Schritten. +1 schneller / -1 langsamer mit max 16; min 0
+     * Als Integer in 1er Schritten. +1 schneller / -1 langsamer mit max 16; min 1
      * Letztendlich beeinflusst man hier die Animationsgeschwindigkeit um den Faktor
      * animation.setRate()...welcher mit animation(Duration.millis(12345) einhergeht.
      * (Das Hintergrundbild wir auf bis 20305px auf der Y-Achse nach unten verschoben.
@@ -424,20 +314,20 @@ public class GameScreenController implements Initializable , InterfaceControllSc
         	}
         	break;
         case -1:
-        	if (speedduration > 0) {
+        	if (speedduration > 1) {
         		speedduration = speedduration-1;
         		//System.out.println(speedduration);
         		translateTransitionParalaxAnim.setRate(speedduration);
         	}
         	break;
         case -2:
-        	if (speedduration >= 2) {
+        	if (speedduration >= 3) {
         		speedduration = speedduration-2;
         		//System.out.println(speedduration);
         		translateTransitionParalaxAnim.setRate(speedduration);
         		break;
         	} 
-        	if (speedduration == 1) {
+        	if (speedduration == 2) {
         		speedduration = speedduration-1;
         		//System.out.println(speedduration);
         		translateTransitionParalaxAnim.setRate(speedduration);
@@ -447,7 +337,6 @@ public class GameScreenController implements Initializable , InterfaceControllSc
             System.out.println("PseudoException ungültiger Parameter. -1/ 1 erwartet"); //ToDo Diese und andere Exceptions implementieren
         }
     }   
-    
     
     
     /**
@@ -470,8 +359,9 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	    	}
     	    }
     	});    	
-    }    
+    }
         
+    
     /**
      * Wird aufgerufen wenn das Rennenbeendet ist.
      * Logik Rundenende. Stoppt die Timelines (Threads).  
@@ -481,8 +371,104 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	timelineRaceTime.stop();
     	timelineQuizCountdown.stop();
     	timelineKeyCountdown.stop();    	
-    }    
+    }
     
+    
+    /**
+     * RestartCountdown fuer die Timeline Tastenkombinationen eingeben
+     */
+    private void restartTimelineKeyCountdown() {
+		timelineKeyCountdown.stop();
+        propertyKeySecondsCountdown.set(KEYSTARTTIMECOUNTDOWN);
+        timelineKeyCountdown = new Timeline();
+        timelineKeyCountdown.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(KEYSTARTTIMECOUNTDOWN+1),
+                new KeyValue(propertyKeySecondsCountdown, 0)));
+        timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+        //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+        timelineKeyCountdown.playFromStart(); 
+    }
+    
+    
+    
+    /**
+     * Countdown fuer die Timeline Tastenkombinationen eingeben
+     */
+    private void restartTimelineQuizCountdown() {
+    	timelineQuizCountdown.stop();
+        propertyQuizSecondsCountdown.set(QUIZSTARTTIMECOUNTDOWN);
+        timelineQuizCountdown = new Timeline();
+        timelineQuizCountdown.getKeyFrames().add(
+        		new KeyFrame(Duration.seconds(QUIZSTARTTIMECOUNTDOWN+1),
+        		new KeyValue(propertyQuizSecondsCountdown, 0)));
+        timelineQuizCountdown.setCycleCount(Timeline.INDEFINITE); 
+        timelineQuizCountdown.playFromStart();    	 
+    }
+    
+    
+    
+    /**
+     * 
+     */
+    private void contemporaryTimelineStart() {
+        /*
+         * Initialisierung Race-Timline erstellen und starten + Eventhandler Countdown Racetime 0 - x Sekunden
+         */
+         timelineRaceTime = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
+             @Override
+             public void handle(ActionEvent t) {
+	               Duration duration = ((KeyFrame)t.getSource()).getTime();
+	               timeDurrationRace = timeDurrationRace.add(duration);                              
+	               timeSecondsProperty.set(timeDurrationRace.toSeconds());
+	               System.out.println(speedduration); //speeddebug                 
+	               System.out.println(idBackgroundImageView.translateYProperty().getValue()); //posdebug                             
+             }
+         	}));
+      	
+          timelineRaceTime.setCycleCount(Timeline.INDEFINITE);
+          timelineRaceTime.play();
+  
+          
+          
+          /*
+           * Initialisierung Tastenkombination-Timline starten Rueckwaerts KEYSTARTTIMECOUNTDOWN - 0 Sekunden 
+           */
+          propertyKeySecondsCountdown.set(KEYSTARTTIMECOUNTDOWN);
+          timelineKeyCountdown = new Timeline();
+          timelineKeyCountdown.getKeyFrames().add(
+                  new KeyFrame(Duration.seconds(KEYSTARTTIMECOUNTDOWN+1),
+                  new KeyValue(propertyKeySecondsCountdown, 0)));
+          timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+          //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+          timelineKeyCountdown.playFromStart();  
+          
+          
+          
+          /*
+           * Initialisierung Quiz-Timeline starten Rueckwaerts QUIZSTARTTIMECOUNTDOWN - 0 Sekunden 
+           */
+          propertyQuizSecondsCountdown.set(QUIZSTARTTIMECOUNTDOWN);
+          timelineQuizCountdown = new Timeline();
+          timelineQuizCountdown.getKeyFrames().add(
+                  new KeyFrame(Duration.seconds(QUIZSTARTTIMECOUNTDOWN+1),
+                  new KeyValue(propertyQuizSecondsCountdown, 0)));
+          timelineQuizCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
+          //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+          timelineQuizCountdown.playFromStart();           
+    }
+    
+    /**
+     * 
+     */
+    private void moveParallax() {
+        translateTransitionParalaxAnim =  new TranslateTransition(Duration.millis(250000), idBackgroundImageView);
+        translateTransitionParalaxAnim.setRate(speedduration);
+        //translateTransition.setOrientation(OrientationType.NONE);
+        translateTransitionParalaxAnim.setFromY(0);
+        translateTransitionParalaxAnim.setToY(20305); //bei 17700 px ist das Auto ueber der Ziellinie das nehmen wir mal als Endpunkt
+        translateTransitionParalaxAnim.setInterpolator(Interpolator.LINEAR);
+        translateTransitionParalaxAnim.setCycleCount(1);
+    }
     
     //####################### SCREENWECHSEL #########################    
     public void setScreenParent(MultiScreenController screenParent){

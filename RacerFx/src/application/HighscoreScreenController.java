@@ -31,12 +31,22 @@ public class HighscoreScreenController implements Initializable, InterfaceContro
     
     /**
      * Laden der Highscore aus der Datenbank (siehe HighscorePool und HighscoreModel)
+     * Schreiben der 
      */
     public void loadHighScore() {
     	objHighscorePool = new HighscorePool();          
     	String myString = "\t" + "NAME" + "\t\t\t\t\t" + "ZEIT" +"\n\n";
     	for (HighscoreModel element : objHighscorePool ) {
-    		myString = myString + "\t" + element.getName() + "\t\t\t\t\t" + element.getPoints() +"\n";    		
+    		if (element.getName().length() <= 5 && element.getName().length() > 1) {
+    			myString = myString + "\t" + element.getName() + "\t\t\t\t\t\t" + element.getPoints() +"\n"; 
+    		} 
+    		if (element.getName().length() == 1) {
+    			myString = myString + "\t" + element.getName() + "\t\t\t\t\t\t" + element.getPoints() +"\n";     			
+    		}
+    		if (element.getName().length() <=7  && element.getName().length() > 5) {
+    			myString = myString + "\t" + element.getName() + "\t\t\t\t\t" + element.getPoints() +"\n"; 
+    		}
+    		//System.out.println(element.getName() + " laenge " + element.getName() .length());    		   		
     	}
     	idHighScoreText.setText(myString);
     }
