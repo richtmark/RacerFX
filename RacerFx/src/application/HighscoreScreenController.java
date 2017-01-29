@@ -63,6 +63,7 @@ public class HighscoreScreenController implements Initializable, InterfaceContro
     
     @FXML
     private void goToScreen2(ActionEvent event){
-       objMultiController.setScreen(RacerFxMain.screenGame);    
+       objMultiController.loadScreen(RacerFxMain.screenGame, "Game.fxml");   
+       objMultiController.setScreen(RacerFxMain.screenGame);
     }    
 }

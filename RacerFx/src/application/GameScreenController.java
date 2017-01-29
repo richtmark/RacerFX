@@ -1,12 +1,12 @@
 /**
  * 
- * Hauptbildschirm. Implementiert die gesamte Spiellogik.
- * 
+ * Hauptbildschirm. Implementiert die Spiellogik. Drei Timelines (also drei Threads) timelineKeyCountdown, 
+ * timelineQuizCountdown, timlineRacetime laufen parallel und steuern die Spiellogik. 
+ *
  * @author Robert/Markus
  * 
  *
 */ 
-
 package application;
 
 import java.net.URL;
@@ -113,7 +113,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
                 
 
     /**
-     * Initializieren der Controllerklasse
+     * Initializieren der Controllerklasse alle Listener anmelden
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {     	
@@ -235,8 +235,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	
 
         /*
-         * Einen ChangeListener erstellen (der dann eine Property gebunden wird)
-         * in diesem Fall später an timeSeconds eine IntegerProperty 
+         * ChangeListener CountdownQuiz 
          */
         final ChangeListener changeListenerCountdownQuiz = new ChangeListener() {
             @Override
@@ -257,7 +256,9 @@ public class GameScreenController implements Initializable , InterfaceControllSc
         propertyQuizSecondsCountdown.addListener(changeListenerCountdownQuiz);   //anmeldung fuer lbl
     	
     	
-    	//##############  Listener AKTIONEN BEI RENNENDE ##########################
+    	/*
+    	 * Changelistener Finish also Zieleinlauf
+    	 */
     	finishProperty.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -271,9 +272,9 @@ public class GameScreenController implements Initializable , InterfaceControllSc
         });    	
     	
     	
-        //######################## Changelistener Racetime #########################
+        
         /*
-         * Ein Changelistener auf die timeSecondsProperty - Racetime
+         * Ein Changelistener auf die Racetime
          */
         final ChangeListener changeListenerRaceTime= new ChangeListener() {
             @Override
@@ -284,12 +285,11 @@ public class GameScreenController implements Initializable , InterfaceControllSc
               //myClientcar.setPositionY(idBackgroundImageView.getTranslateY());
               if (status == Animation.Status.STOPPED) {            	  
             	  finishProperty.set(true);
-            	  System.out.println("Status stopped!!!");
+            	  //System.out.println("Status stopped!!!");
               }              
             }	
         };        
-        //Hier wird der Listener bei der property angemeldet
-        timeSecondsProperty.addListener(changeListenerRaceTime);         
+        timeSecondsProperty.addListener(changeListenerRaceTime);  //fuer lbl Racetime siehe Binding oben ToDo refractor binding alle       
         moveParallax();
     }
     
@@ -392,7 +392,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     
     
     /**
-     * Countdown fuer die Timeline Tastenkombinationen eingeben
+     * RestartCountdown fuer die Timeline Tastenkombinationen eingeben
      */
     private void restartTimelineQuizCountdown() {
     	timelineQuizCountdown.stop();
@@ -408,7 +408,8 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     
     
     /**
-     * 
+     * Alle Quiz,Key, Race-Timline starten 
+     * ToDo Timlinerefractor
      */
     private void contemporaryTimelineStart() {
         /*
@@ -428,8 +429,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
           timelineRaceTime.setCycleCount(Timeline.INDEFINITE);
           timelineRaceTime.play();
   
-          
-          
+                    
           /*
            * Initialisierung Tastenkombination-Timline starten Rueckwaerts KEYSTARTTIMECOUNTDOWN - 0 Sekunden 
            */
@@ -438,8 +438,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
           timelineKeyCountdown.getKeyFrames().add(
                   new KeyFrame(Duration.seconds(KEYSTARTTIMECOUNTDOWN+1),
                   new KeyValue(propertyKeySecondsCountdown, 0)));
-          timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
-          //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
+          timelineKeyCountdown.setCycleCount(Timeline.INDEFINITE);
           timelineKeyCountdown.playFromStart();  
           
           
@@ -453,12 +452,11 @@ public class GameScreenController implements Initializable , InterfaceControllSc
                   new KeyFrame(Duration.seconds(QUIZSTARTTIMECOUNTDOWN+1),
                   new KeyValue(propertyQuizSecondsCountdown, 0)));
           timelineQuizCountdown.setCycleCount(Timeline.INDEFINITE); //ewig wiederholen
-          //timeline.cycleCountProperty().set(5); // 5 mal wiederholen
           timelineQuizCountdown.playFromStart();           
     }
     
     /**
-     * 
+     * Initialisierung des Scrollbildes
      */
     private void moveParallax() {
         translateTransitionParalaxAnim =  new TranslateTransition(Duration.millis(250000), idBackgroundImageView);
