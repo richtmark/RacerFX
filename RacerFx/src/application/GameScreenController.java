@@ -148,7 +148,8 @@ public class GameScreenController implements Initializable , InterfaceControllSc
             public void handle(ActionEvent event) {    
     		   contemporaryTimelineStart();
          	   translateTransitionParalaxAnim.play(); 
-         	   playbutton.setDisable(true);             
+         	   playbutton.setDisable(true);    
+         	   playbutton.setVisible(false);
                idTxfWanted.setText(keyRaceObj.getNewRequestedString());               
             }
         }); 
@@ -162,7 +163,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
             public void changed(ObservableValue<? extends Toggle> ov,
                 Toggle old_toggle, Toggle new_toggle) {
                     if (answerToggleGroup.getSelectedToggle() != null) {
-                    	System.out.println("Toggle");
+                    	//System.out.println("Toggle");
                     	//pruefe Antwort
                     	if (answerToggleGroup.getSelectedToggle().getUserData().equals(questionObjekt.getTrueAnswerString())) {
                     		//System.out.println("Answer true Quiz");
@@ -204,7 +205,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
             		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
             		restartTimelineKeyCountdown();
             	} else {                    		
-            		System.out.println("KeyString false: "  + tempBool); 
+            		//System.out.println("KeyString false: "  + tempBool); 
             		setSpeed(-1);    
             		idTxfWanted.setText(keyRaceObj.getNewRequestedString());   
             		restartTimelineKeyCountdown();
@@ -421,8 +422,8 @@ public class GameScreenController implements Initializable , InterfaceControllSc
 	               Duration duration = ((KeyFrame)t.getSource()).getTime();
 	               timeDurrationRace = timeDurrationRace.add(duration);                              
 	               timeSecondsProperty.set(timeDurrationRace.toSeconds());
-	               System.out.println(speedduration); //speeddebug                 
-	               System.out.println(idBackgroundImageView.translateYProperty().getValue()); //posdebug                             
+	               //System.out.println(speedduration); //speeddebug                 
+	               //System.out.println(idBackgroundImageView.translateYProperty().getValue()); //posdebug                             
              }
          	}));
       	
