@@ -20,12 +20,12 @@
             <Canvas id="idCanvas" fx:id="idCanvas" height="202.0" layoutX="-2.0" layoutY="-3.0" width="600.0" />
             <ImageView fx:id="idBackgroundImageView" fitHeight="106.0" fitWidth="4.0" pickOnBounds="true" preserveRatio="true" scaleX="195.0" scaleY="195.0" x="346.0" y="-10130.0">
                <image>
-                  <Image url="@../resources/background.jpg" />
+                  <Image url="@/resources/background.jpg" />
                </image>
             </ImageView>
             <ImageView fx:id="idimagecar" fitHeight="72.0" fitWidth="28.0" layoutX="335.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../bin/resources/car_blue_small.png" />
+                  <Image url="@/resources/car_blue_small.png" />
                </image>
             </ImageView>
             <Label fx:id="idRaceTimerLabel" layoutX="335.0" layoutY="22.0" text="Label" />

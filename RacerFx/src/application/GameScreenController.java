@@ -275,7 +275,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	
         
         /*
-         * Ein Changelistener auf die Racetime
+         * Ein Changelistener auf die Ra cetime
          */
         final ChangeListener changeListenerRaceTime= new ChangeListener() {
             @Override
