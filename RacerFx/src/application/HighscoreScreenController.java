@@ -31,7 +31,7 @@ public class HighscoreScreenController implements Initializable, InterfaceContro
     
     /**
      * Laden der Highscore aus der Datenbank (siehe HighscorePool und HighscoreModel)
-     * Schreiben der 
+     * Schreiben in TextArea ToDo TableView (aber dann muss man das Model veraendern :/!)
      */
     public void loadHighScore() {
     	objHighscorePool = new HighscorePool();          
@@ -58,12 +58,13 @@ public class HighscoreScreenController implements Initializable, InterfaceContro
 
     @FXML
     private void goToScreen1(ActionEvent event){
+       objMultiController.loadScreen(RacerFxMain.screenGame, "Game.fxml");  //notloesung restartgame nach megafail git-rollback ToDo refactoring
        objMultiController.setScreen(RacerFxMain.screenSplash);
     }
     
     @FXML
     private void goToScreen2(ActionEvent event){
-       objMultiController.loadScreen(RacerFxMain.screenGame, "Game.fxml");   
+       objMultiController.loadScreen(RacerFxMain.screenGame, "Game.fxml");   //notloesung restartgame
        objMultiController.setScreen(RacerFxMain.screenGame);
     }    
 }
