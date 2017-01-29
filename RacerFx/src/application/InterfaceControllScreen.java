@@ -1,3 +1,6 @@
+
+package application;
+
 /**
  * Interface InterfaceControllScreen. Einsatz eines einfachen Interfaces. Das
  * Interface wird von all jenen Controllern implementiert die eine konkrete Ansicht steuern.
@@ -5,8 +8,6 @@
  * 
  * @author Robert/Markus
  */
-package application;
-
 public interface InterfaceControllScreen {
 	/**
 	 * Methode zum setzen des Screens

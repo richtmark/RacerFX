@@ -1,3 +1,5 @@
+package Models;
+
 /**
  * Datenmodel einer einzelnen Frage. Vorerst fest mit einer moegl. wahren Antwort
  * und immer vier Antwortmoeglichkeiten. 
@@ -5,9 +7,6 @@
  * @author Robert/Markus
  * 
  */
-
-package Models;
-
 public class QuestionModel {
 	
 	private String questiontext; 	 //Der Fragetext

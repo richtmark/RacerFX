@@ -1,3 +1,10 @@
+package race;
+
+import java.util.Random;
+
+import Models.QuestionModel;
+import Models.QuestionPool;
+
 /**
  * Stellt Methoden bereit um die Fragen aus der Datenbank zu holen. 
  * (siehe QuestionModel/QuestionPool)
@@ -8,14 +15,6 @@
  * 
  * @author Robert/Markus
  */
-
-package race;
-
-import java.util.Random;
-
-import Models.QuestionModel;
-import Models.QuestionPool;
-
 public class QuizRace {
 	private QuestionPool objQuestionPool;
 	private QuestionModel objCurrentModel;

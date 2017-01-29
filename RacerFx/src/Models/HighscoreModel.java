@@ -1,11 +1,10 @@
+package Models;
+
 /**
  * Datenmodel fuer ein konkretes Highscoreobjekt also einen Eintrag
  * 
  * @author Robert/Markus
  */
-
-package Models;
-
 import javafx.beans.property.SimpleStringProperty;
 
 public class HighscoreModel {

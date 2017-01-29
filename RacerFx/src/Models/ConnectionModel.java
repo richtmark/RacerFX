@@ -1,5 +1,14 @@
 package Models;
 
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 /**
  * 
  * Klasse stellt Methoden bereit um eine Datenbankverbindung (MySql) herzustellen.
@@ -10,16 +19,6 @@ package Models;
  * @author Robert/Markus
  * 
  */
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-
-
 public class ConnectionModel {
 	
 	private ArrayList<String> arrListFragen;	

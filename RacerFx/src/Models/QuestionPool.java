@@ -1,5 +1,9 @@
 package Models;
 
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * verwaltet eine Pool aus beliebig vielen Fragen vom Typ ArrayList<QuestionModel>.
  * Implementiert das Interface Iterable<QuestionModel> zum iterieren
@@ -9,10 +13,6 @@ package Models;
  * 
  * @author Robert/Markus
  */
-
-import java.util.ArrayList;
-import java.util.Iterator;
-
 public class QuestionPool implements Iterable<QuestionModel> {	
 	private ConnectionModel objDbConnection; 
 	private ArrayList<QuestionModel> objQuestionPoolList = new ArrayList<QuestionModel>();

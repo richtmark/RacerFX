@@ -1,12 +1,3 @@
-/**
- * 
- * Hauptbildschirm. Implementiert die Spiellogik. Drei Timelines (also drei Threads) timelineKeyCountdown, 
- * timelineQuizCountdown, timlineRacetime laufen parallel und steuern die Spiellogik. 
- *
- * @author Robert/Markus
- * 
- *
-*/ 
 package application;
 
 import java.net.URL;
@@ -49,6 +40,16 @@ import race.QuizRace;
 //import server.ClientCar;  //erstmal alles raus
 //import server.raceDienst;
 
+
+/**
+ * 
+ * Controller Hauptbildschirm. Implementiert die Spiellogik. Drei Timelines (also drei Threads) timelineKeyCountdown, 
+ * timelineQuizCountdown, timlineRacetime laufen parallel und steuern die Spiellogik. 
+ *
+ * @author Robert/Markus
+ * 
+ *
+*/
 public class GameScreenController implements Initializable , InterfaceControllScreen {
 	MultiScreenController myController; //Der Controller fuer die Szenenwechsel	
     @FXML //  fx:id="playButton" den playbutton aus der FXML holen
@@ -159,6 +160,9 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	//############################################################################################                
                         
       //################ Listener ToggelAntworten + Timelinereset via neue Timeline ##################
+    	/**
+    	 * Listener und Event Antwort
+    	 */
         answerToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
             public void changed(ObservableValue<? extends Toggle> ov,
                 Toggle old_toggle, Toggle new_toggle) {
@@ -188,7 +192,9 @@ public class GameScreenController implements Initializable , InterfaceControllSc
 
         
         
-        //################## Listener auf Textfield  Keyeingabe (noch einfacher als unten) + Timelinereset via neue Timeline ###########                
+        /**
+         * Listener Textfield Kombinationseingabe               
+         */
         idTxfInput.textProperty().addListener((observable, oldValue, newValue) -> {
             if(idTxfInput.getText().length() == 4) {
             	String tempInput = idTxfInput.getText();  
@@ -216,7 +222,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
         
         
       //######################## Changelistener Countdown Timeline Key (label) #########################
-        /*
+        /**
          * ChangeListener Countdown Eingabe Tastenkombination
          */
         final ChangeListener changeListenerCountdownKey = new ChangeListener() {
@@ -235,7 +241,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	
     	
 
-        /*
+        /**
          * ChangeListener CountdownQuiz 
          */
         final ChangeListener changeListenerCountdownQuiz = new ChangeListener() {
@@ -257,7 +263,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
         propertyQuizSecondsCountdown.addListener(changeListenerCountdownQuiz);   //anmeldung fuer lbl
     	
     	
-    	/*
+    	/**
     	 * Changelistener Finish also Zieleinlauf
     	 */
     	finishProperty.addListener(new ChangeListener<Boolean>() {
@@ -274,7 +280,7 @@ public class GameScreenController implements Initializable , InterfaceControllSc
     	
     	
         
-        /*
+        /**
          * Ein Changelistener auf die Ra cetime
          */
         final ChangeListener changeListenerRaceTime= new ChangeListener() {

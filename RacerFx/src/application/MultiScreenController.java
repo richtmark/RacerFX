@@ -1,12 +1,3 @@
-/** 
- * MultiScreenController. Diese Controllerklasse steuert den wechsel zwischen 
- * den einzelnen Controllern  (und damit verbunden der verschiedenen Ansichten).
- * Verwaltet in HashMap. Stellt Methoden bereit zum laden, wechseln und entfernen
- * einzelnenr Screens. 
- * 
- * @author Robert/Markus
- */
-
 package application;
 
 import java.util.HashMap;
@@ -22,7 +13,14 @@ import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
-
+/** 
+ * MultiScreenController. Diese Controllerklasse steuert den wechsel zwischen 
+ * den einzelnen Controllern  (und damit verbunden der verschiedenen Ansichten).
+ * Verwaltet in HashMap. Stellt Methoden bereit zum laden, wechseln und entfernen
+ * einzelner Screens. 
+ * 
+ * @author Robert/Markus
+ */
 public class MultiScreenController extends StackPane {
   
     //Key-Value zum verwalten der Ansichten 

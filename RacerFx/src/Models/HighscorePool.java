@@ -1,3 +1,5 @@
+package Models;
+
 /**
  * Datenmodel fuer beliebig viele Highscoreobjekte. Implementiert das Interface 
  * Iterable<HighscoreModel> zum iterieren der einzelenen enthaltenen Objekte.
@@ -7,9 +9,6 @@
  * 
  * @author Robert/Markus
  */
-
-package Models;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 

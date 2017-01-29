@@ -1,12 +1,3 @@
-/**
- * 
- * Klasse erzeugt Tastenkombination die der Spieler in einem bestimmten Zeitrahmen 
- * eingeben muss. Stellt Methoden bereit diese Eingaben zu validieren.
- * 
- *  @author Robert/Markus
- * 
- */
-
 
 package race;
 
@@ -16,7 +7,14 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
+/**
+ * 
+ * Klasse erzeugt Tastenkombination die der Spieler in einem bestimmten Zeitrahmen 
+ * eingeben muss. Stellt Methoden bereit diese Eingaben zu validieren.
+ * 
+ *  @author Robert/Markus
+ * 
+ */
 public class KeyRace {		//implements Runnable 
 	
 	//######################################################################################
